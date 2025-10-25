@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - ShopHub</title>
+    <meta name="description" content="Browse our wide range of quality products at ShopHub. Find the best deals on electronics, clothing, home goods, and more.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb',
+                        secondary: '#10b981',
+                        accent: '#f59e0b',
+                        dark: '#1f2937',
+                        gray: '#6b7280',
+                        light: '#f9fafb',
+                        border: '#e5e7eb',
+                        success: '#10b981',
+                        error: '#dc2626',
+                        warning: '#f59e0b',
+                        info: '#0284c7'
+                    },
+                    fontFamily: {
+                        'primary': ['Roboto', 'sans-serif'],
+                        'secondary': ['Open Sans', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .font-primary { font-family: 'Roboto', sans-serif; }
+        .font-secondary { font-family: 'Open Sans', sans-serif; }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .mobile-menu { transform: translateX(-100%); transition: transform 0.3s ease; }
+        .mobile-menu.active { transform: translateX(0); }
+        .dropdown-content { display: none; }
+        .dropdown:hover .dropdown-content { display: block; }
+        .product-image-hover { overflow: hidden; }
+        .product-image-hover img { transition: transform 0.3s ease; }
+        .product-image-hover:hover img { transform: scale(1.05); }
+        .star-rating { color: #fbbf24; }
+        .filter-checkbox:checked + label { color: #2563eb; font-weight: 500; }
+    </style>
+</head>
+<body class="font-secondary text-dark bg-white">
+    <!-- Skip to Content -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-white px-4 py-2 rounded-md">
+        Skip to main content
+    </a>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white shadow-sm">
+        <!-- Top Bar -->
+        <div class="bg-dark text-white py-2">
+            <div class="container mx-auto px-4">
+                <div class="flex justify-between items-center text-sm">
+                    <span>Free shipping on orders over $50</span>
+                    <div class="flex gap-4">
+                        <a href="login.html" class="hover:text-primary transition">Login</a>
+                        <a href="register.html" class="hover:text-primary transition">Register</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Header -->
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <a href="index.html" class="text-3xl font-bold font-primary text-primary">ShopHub</a>
+
+                <!-- Mobile Menu Toggle -->
+                <button id="mobile-menu-toggle" class="lg:hidden text-dark">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+
+                <!-- Navigation -->
+                <nav class="hidden lg:flex items-center gap-8">
+                    <a href="index.html" class="font-medium hover:text-primary transition">Home</a>
+                    <div class="dropdown relative">
+                        <a href="products.html" class="font-medium text-primary hover:text-primary transition flex items-center gap-1">
+                            Products <i class="fas fa-chevron-down text-xs"></i>
+                        </a>
+                        <div class="dropdown-content absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2">
+                            <a href="#" class="block px-4 py-2 hover:bg-light transition">Electronics</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-light transition">Clothing</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-light transition">Home & Garden</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-light transition">Sports</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-light transition">Books</a>
+                        </div>
+                    </div>
+                    <a href="about.html" class="font-medium hover:text-primary transition">About</a>
+                    <a href="contact.html" class="font-medium hover:text-primary transition">Contact</a>
+                </nav>
+
+                <!-- Search Bar -->
+                <div class="hidden lg:flex items-center bg-light rounded-full px-4 py-2 max-w-md">
+                    <input type="text" placeholder="Search products..." class="bg-transparent outline-none flex-1">
+                    <button class="text-primary hover:text-secondary transition">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+
+                <!-- Header Actions -->
+                <div class="hidden lg:flex items-center gap-4">
+                    <a href="#" class="text-dark hover:text-primary transition">
+                        <i class="fas fa-user text-xl"></i>
+                    </a>
+                    <a href="cart.html" class="relative text-dark hover:text-primary transition">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <span class="absolute -top-2 -right-2 bg-accent text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Mobile Search -->
+            <div class="lg:hidden mt-4">
+                <div class="flex items-center bg-light rounded-full px-4 py-2">
+                    <input type="text" placeholder="Search products..." class="bg-transparent outline-none flex-1">
+                    <button class="text-primary hover:text-secondary transition">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu fixed top-0 left-0 w-64 h-full bg-white shadow-lg z-50 lg:hidden">
+            <div class="p-4">
+                <button id="mobile-menu-close" class="text-dark hover:text-primary transition mb-4">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+                <nav class="flex flex-col gap-4">
+                    <a href="index.html" class="font-medium hover:text-primary transition">Home</a>
+                    <a href="products.html" class="font-medium text-primary hover:text-primary transition">Products</a>
+                    <a href="about.html" class="font-medium hover:text-primary transition">About</a>
+                    <a href="contact.html" class="font-medium hover:text-primary transition">Contact</a>
+                    <a href="login.html" class="font-medium hover:text-primary transition">Login</a>
+                    <a href="register.html" class="font-medium hover:text-primary transition">Register</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="py-8">
+        <div class="container mx-auto px-4">
+            <!-- Breadcrumb -->
+            <nav class="flex items-center space-x-2 text-sm mb-6">
+                <a href="index.html" class="text-gray hover:text-primary transition">Home</a>
+                <span class="text-gray">/</span>
+                <span class="text-primary font-medium">Products</span>
+            </nav>
+
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Sidebar Filters -->
+                <aside class="lg:w-1/4">
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h2 class="text-xl font-bold font-primary mb-6">Filters</h2>
+                        
+                        <!-- Categories -->
+                        <div class="mb-6">
+                            <h3 class="font-semibold mb-3">Categories</h3>
+                            <div class="space-y-2">
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="electronics" class="filter-checkbox" checked>
+                                    <label for="electronics" class="ml-2 cursor-pointer">Electronics</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="clothing" class="filter-checkbox">
+                                    <label for="clothing" class="ml-2 cursor-pointer">Clothing</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="home" class="filter-checkbox">
+                                    <label for="home" class="ml-2 cursor-pointer">Home & Garden</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="sports" class="filter-checkbox">
+                                    <label for="sports" class="ml-2 cursor-pointer">Sports</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="books" class="filter-checkbox">
+                                    <label for="books" class="ml-2 cursor-pointer">Books</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Price Range -->
+                        <div class="mb-6">
+                            <h3 class="font-semibold mb-3">Price Range</h3>
+                            <div class="space-y-2">
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="price1" class="filter-checkbox">
+                                    <label for="price1" class="ml-2 cursor-pointer">Under $25</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="price2" class="filter-checkbox">
+                                    <label for="price2" class="ml-2 cursor-pointer">$25 - $50</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="price3" class="filter-checkbox">
+                                    <label for="price3" class="ml-2 cursor-pointer">$50 - $100</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="price4" class="filter-checkbox">
+                                    <label for="price4" class="ml-2 cursor-pointer">$100 - $200</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="price5" class="filter-checkbox">
+                                    <label for="price5" class="ml-2 cursor-pointer">Over $200</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Rating -->
+                        <div class="mb-6">
+                            <h3 class="font-semibold mb-3">Customer Rating</h3>
+                            <div class="space-y-2">
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="rating5" class="filter-checkbox">
+                                    <label for="rating5" class="ml-2 cursor-pointer flex items-center">
+                                        <span class="star-rating mr-1">
+                                            <i class="fas fa-star text-sm"></i>
+                                            <i class="fas fa-star text-sm"></i>
+                                            <i class="fas fa-star text-sm"></i>
+                                            <i class="fas fa-star text-sm"></i>
+                                            <i class="fas fa-star text-sm"></i>
+                                        </span>
+                                        & Up
+                                    </label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="rating4" class="filter-checkbox">
+                                    <label for="rating4" class="ml-2 cursor-pointer flex items-center">
+                                        <span class="star-rating mr-1">
+                                            <i class="fas fa-star text-sm"></i>
+                                            <i class="fas fa-star text-sm"></i>
+                                            <i class="fas fa-star text-sm"></i>
+                                            <i class="fas fa-star text-sm"></i>
+                                            <i class="far fa-star text-sm"></i>
+                                        </span>
+                                        & Up
+                                    </label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="rating3" class="filter-checkbox">
+                                    <label for="rating3" class="ml-2 cursor-pointer flex items-center">
+                                        <span class="star-rating mr-1">
+                                            <i class="fas fa-star text-sm"></i>
+                                            <i class="fas fa-star text-sm"></i>
+                                            <i class="fas fa-star text-sm"></i>
+                                            <i class="far fa-star text-sm"></i>
+                                            <i class="far fa-star text-sm"></i>
+                                        </span>
+                                        & Up
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Special Offers -->
+                        <div class="mb-6">
+                            <h3 class="font-semibold mb-3">Special Offers</h3>
+                            <div class="space-y-2">
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="sale" class="filter-checkbox">
+                                    <label for="sale" class="ml-2 cursor-pointer">On Sale</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="new" class="filter-checkbox">
+                                    <label for="new" class="ml-2 cursor-pointer">New Arrivals</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="featured" class="filter-checkbox">
+                                    <label for="featured" class="ml-2 cursor-pointer">Featured</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="w-full bg-primary text-white py-2 rounded hover:bg-blue-600 transition">
+                            Apply Filters
+                        </button>
+                    </div>
+                </aside>
+
+                <!-- Products Grid -->
+                <div class="lg:w-3/4">
+                    <!-- Sorting and Results Count -->
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                        <p class="text-gray">Showing 1-12 of 48 results</p>
+                        <div class="flex items-center gap-2">
+                            <label for="sort" class="text-gray">Sort by:</label>
+                            <select id="sort" class="border border-border rounded px-3 py-1 outline-none focus:border-primary">
+                                <option value="popularity">Popularity</option>
+                                <option value="price-low">Price: Low to High</option>
+                                <option value="price-high">Price: High to Low</option>
+                                <option value="newest">Newest First</option>
+                                <option value="rating">Average Rating</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Product Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Product 1 -->
+                        <div class="card-hover bg-white rounded-lg shadow-md overflow-hidden">
+                            <div class="product-image-hover relative">
+                                <img src="https://picsum.photos/seed/product1/300/300.jpg" alt="Wireless Headphones" class="w-full h-48 object-cover">
+                                <span class="absolute top-2 right-2 bg-accent text-white px-2 py-1 rounded text-sm font-semibold">Sale</span>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-lg mb-2">Premium Wireless Headphones</h3>
+                                <div class="text-primary font-bold text-xl mb-2">$79.99</div>
+                                <div class="flex items-center mb-3">
+                                    <div class="star-rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                    <span class="text-gray text-sm ml-2">(24)</span>
+                                </div>
+                                <a href="product-detail.html" class="block w-full bg-primary text-white text-center py-2 rounded hover:bg-blue-600 transition">
+                                    Add to Cart
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Product 2 -->
+                        <div class="card-hover bg-white rounded-lg shadow-md overflow-hidden">
+                            <div class="product-image-hover">
+                                <img src="https://picsum.photos/seed/product2/300/300.jpg" alt="Smart Watch" class="w-full h-48 object-cover">
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-lg mb-2">Smart Watch Pro</h3>
+                                <div class="text-primary font-bold text-xl mb-2">$199.99</div>
+                                <div class="flex items-center mb-3">
+                                    <div class="star-rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <span class="text-gray text-sm ml-2">(42)</span>
+                                </div>
+                                <a href="product-detail.html" class="block w-full bg-primary text-white text-center py-2 rounded hover:bg-blue-600 transition">
+                                    Add to Cart
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Product 3 -->
+                        <div class="card-hover bg-white rounded-lg shadow-md overflow-hidden">
+                            <div class="product-image-hover relative">
+                                <img src="https://picsum.photos/seed/product3/300/300.jpg" alt="Laptop Bag" class="w-full h-48 object-cover">
+                                <span class="absolute top-2 right-2 bg-secondary text-white px-2 py-1 rounded text-sm font-semibold">New</span>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-lg mb-2">Professional Laptop Bag</h3>
+                                <div class="text-primary font-bold text-xl mb-2">$49.99</div>
+                                <div class="flex items-center mb-3">
+                                    <div class="star-rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <span class="text-gray text-sm ml-2">(18)</span>
+                                </div>
+                                <a href="product-detail.html" class="block w-full bg-primary text-white text-center py-2 rounded hover:bg-blue-600 transition">
+                                    Add to Cart
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Product 4 -->
+                        <div class="card-hover bg-white rounded-lg shadow-md overflow-hidden">
+                            <div class="product-image-hover">
+                                <img src="https://picsum.photos/seed/product4/300/300.jpg" alt="Bluetooth Speaker" class="w-full h-48 object-cover">
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-lg mb-2">Portable Bluetooth Speaker</h3>
+                                <div class="text-primary font-bold text-xl mb-2">$39.99</div>
+                                <div class="flex items-center mb-3">
+                                    <div class="star-rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                    <span class="text-gray text-sm ml-2">(31)</span>
+                                </div>
+                                <a href="product-detail.html" class="block w-full bg-primary text-white text-center py-2 rounded hover:bg-blue-600 transition">
+                                    Add to Cart
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Product 5 -->
+                        <div class="card-hover bg-white rounded-lg shadow-md overflow-hidden">
+                            <div class="product-image-hover relative">
+                                <img src="https://picsum.photos/seed/product5/300/300.jpg" alt="Fitness Tracker" class="w-full h-48 object-cover">
+                                <span class="absolute top-2 right-2 bg-accent text-white px-2 py-1 rounded text-sm font-semibold">Sale</span>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-lg mb-2">Fitness Tracker Band</h3>
+                                <div class="text-primary font-bold text-xl mb-2">$59.99</div>
+                                <div class="flex items-center mb-3">
+                                    <div class="star-rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <span class="text-gray text-sm ml-2">(27)</span>
+                                </div>
+                                <a href="product-detail.html" class="block w-full bg-primary text-white text-center py-2 rounded hover:bg-blue-600 transition">
+                                    Add to Cart
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Product 6 -->
+                        <div class="card-hover bg-white rounded-lg shadow-md overflow-hidden">
+                            <div class="product-image-hover">
+                                <img src="https://picsum.photos/seed/product6/300/300.jpg" alt="Wireless Mouse" class="w-full h-48 object-cover">
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-lg mb-2">Ergonomic Wireless Mouse</h3>
+                                <div class="text-primary font-bold text-xl mb-2">$29.99</div>
+                                <div class="flex items-center mb-3">
+                                    <div class="star-rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <span class="text-gray text-sm ml-2">(56)</span>
+                                </div>
+                                <a href="product-detail.html" class="block w-full bg-primary text-white text-center py-2 rounded hover:bg-blue-600 transition">
+                                    Add to Cart
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Product 7 -->
+                        <div class="card-hover bg-white rounded-lg shadow-md overflow-hidden">
+                            <div class="product-image-hover">
+                                <img src="https://picsum.photos/seed/product7/300/300.jpg" alt="Phone Case" class="w-full h-48 object-cover">
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-lg mb-2">Premium Phone Case</h3>
+                                <div class="text-primary font-bold text-xl mb-2">$19.99</div>
+                                <div class="flex items-center mb-3">
+                                    <div class="star-rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <span class="text-gray text-sm ml-2">(22)</span>
+                                </div>
+                                <a href="product-detail.html" class="block w-full bg-primary text-white text-center py-2 rounded hover:bg-blue-600 transition">
+                                    Add to Cart
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Product 8 -->
+                        <div class="card-hover bg-white rounded-lg shadow-md overflow-hidden">
+                            <div class="product-image-hover relative">
+                                <img src="https://picsum.photos/seed/product8/300/300.jpg" alt="Tablet Stand" class="w-full h-48 object-cover">
+                                <span class="absolute top-2 right-2 bg-secondary text-white px-2 py-1 rounded text-sm font-semibold">New</span>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-lg mb-2">Adjustable Tablet Stand</h3>
+                                <div class="text-primary font-bold text-xl mb-2">$24.99</div>
+                                <div class="flex items-center mb-3">
+                                    <div class="star-rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                    <span class="text-gray text-sm ml-2">(15)</span>
+                                </div>
+                                <a href="product-detail.html" class="block w-full bg-primary text-white text-center py-2 rounded hover:bg-blue-600 transition">
+                                    Add to Cart
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Product 9 -->
+                        <div class="card-hover bg-white rounded-lg shadow-md overflow-hidden">
+                            <div class="product-image-hover">
+                                <img src="https://picsum.photos/seed/product9/300/300.jpg" alt="USB Hub" class="w-full h-48 object-cover">
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-lg mb-2">Multi-Port USB Hub</h3>
+                                <div class="text-primary font-bold text-xl mb-2">$34.99</div>
+                                <div class="flex items-center mb-3">
+                                    <div class="star-rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <span class="text-gray text-sm ml-2">(19)</span>
+                                </div>
+                                <a href="product-detail.html" class="block w-full bg-primary text-white text-center py-2 rounded hover:bg-blue-600 transition">
+                                    Add to Cart
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Product 10 -->
+                        <div class="card-hover bg-white rounded-lg shadow-md overflow-hidden">
+                            <div class="product-image-hover relative">
+                                <img src="https://picsum.photos/seed/product10/300/300.jpg" alt="Cable Organizer" class="w-full h-48 object-cover">
+                                <span class="absolute top-2 right-2 bg-accent text-white px-2 py-1 rounded text-sm font-semibold">Sale</span>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-lg mb-2">Desk Cable Organizer</h3>
+                                <div class="text-primary font-bold text-xl mb-2">$14.99</div>
+                                <div class="flex items-center mb-3">
+                                    <div class="star-rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <span class="text-gray text-sm ml-2">(38)</span>
+                                </div>
+                                <a href="product-detail.html" class="block w-full bg-primary text-white text-center py-2 rounded hover:bg-blue-600 transition">
+                                    Add to Cart
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Product 11 -->
+                        <div class="card-hover bg-white rounded-lg shadow-md overflow-hidden">
+                            <div class="product-image-hover">
+                                <img src="https://picsum.photos/seed/product11/300/300.jpg" alt="Laptop Stand" class="w-full h-48 object-cover">
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-lg mb-2">Adjustable Laptop Stand</h3>
+                                <div class="text-primary font-bold text-xl mb-2">$44.99</div>
+                                <div class="flex items-center mb-3">
+                                    <div class="star-rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <span class="text-gray text-sm ml-2">(26)</span>
+                                </div>
+                                <a href="product-detail.html" class="block w-full bg-primary text-white text-center py-2 rounded hover:bg-blue-600 transition">
+                                    Add to Cart
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Product 12 -->
+                        <div class="card-hover bg-white rounded-lg shadow-md overflow-hidden">
+                            <div class="product-image-hover relative">
+                                <img src="https://picsum.photos/seed/product12/300/300.jpg" alt="Power Bank" class="w-full h-48 object-cover">
+                                <span class="absolute top-2 right-2 bg-secondary text-white px-2 py-1 rounded text-sm font-semibold">New</span>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-lg mb-2">High-Capacity Power Bank</h3>
+                                <div class="text-primary font-bold text-xl mb-2">$39.99</div>
+                                <div class="flex items-center mb-3">
+                                    <div class="star-rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                    <span class="text-gray text-sm ml-2">(33)</span>
+                                </div>
+                                <a href="product-detail.html" class="block w-full bg-primary text-white text-center py-2 rounded hover:bg-blue-600 transition">
+                                    Add to Cart
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="flex justify-center mt-8">
+                        <nav class="flex items-center space-x-2">
+                            <a href="#" class="px-3 py-2 rounded border border-border hover:bg-light transition">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                            <a href="#" class="px-3 py-2 rounded bg-primary text-white">1</a>
+                            <a href="#" class="px-3 py-2 rounded border border-border hover:bg-light transition">2</a>
+                            <a href="#" class="px-3 py-2 rounded border border-border hover:bg-light transition">3</a>
+                            <a href="#" class="px-3 py-2 rounded border border-border hover:bg-light transition">4</a>
+                            <a href="#" class="px-3 py-2 rounded border border-border hover:bg-light transition">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h3 class="text-xl font-bold font-primary mb-4">About ShopHub</h3>
+                    <p class="text-gray mb-4">ShopHub is your one-stop online store for quality products at affordable prices.</p>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-gray hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray hover:text-white transition"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray hover:text-white transition"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray hover:text-white transition"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold font-primary mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="about.html" class="text-gray hover:text-white transition">About Us</a></li>
+                        <li><a href="contact.html" class="text-gray hover:text-white transition">Contact Us</a></li>
+                        <li><a href="#" class="text-gray hover:text-white transition">Terms & Conditions</a></li>
+                        <li><a href="#" class="text-gray hover:text-white transition">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray hover:text-white transition">FAQs</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold font-primary mb-4">Customer Service</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray hover:text-white transition">Shipping Information</a></li>
+                        <li><a href="#" class="text-gray hover:text-white transition">Returns & Exchanges</a></li>
+                        <li><a href="#" class="text-gray hover:text-white transition">Size Guide</a></li>
+                        <li><a href="#" class="text-gray hover:text-white transition">Track Your Order</a></li>
+                        <li><a href="#" class="text-gray hover:text-white transition">Payment Methods</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold font-primary mb-4">Contact Info</h3>
+                    <ul class="space-y-2 text-gray">
+                        <li><i class="fas fa-map-marker-alt mr-2"></i> 123 Main Street, New York, NY 10001</li>
+                        <li><i class="fas fa-phone mr-2"></i> +1 (123) 456-7890</li>
+                        <li><i class="fas fa-envelope mr-2"></i> info@shophub.com</li>
+                        <li><i class="fas fa-clock mr-2"></i> Mon-Fri: 9am-6pm EST</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray pt-8 text-center text-gray">
+                <p>&copy; 2023 ShopHub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuClose = document.getElementById('mobile-menu-close');
+
+        mobileMenuToggle.addEventListener('click', () => {
+            mobileMenu.classList.add('active');
+        });
+
+        mobileMenuClose.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
+                mobileMenu.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
