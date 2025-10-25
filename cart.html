@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - ShopHub</title>
+    <meta name="description" content="Review and manage your shopping cart at ShopHub. Update quantities, apply coupon codes, and proceed to checkout.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb',
+                        secondary: '#10b981',
+                        accent: '#f59e0b',
+                        dark: '#1f2937',
+                        gray: '#6b7280',
+                        light: '#f9fafb',
+                        border: '#e5e7eb',
+                        success: '#10b981',
+                        error: '#dc2626',
+                        warning: '#f59e0b',
+                        info: '#0284c7'
+                    },
+                    fontFamily: {
+                        'primary': ['Roboto', 'sans-serif'],
+                        'secondary': ['Open Sans', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .font-primary { font-family: 'Roboto', sans-serif; }
+        .font-secondary { font-family: 'Open Sans', 'sans-serif'; }
+        .quantity-btn { transition: all 0.2s ease; }
+        .quantity-btn:hover { background-color: #f3f4f6; }
+        .quantity-btn:active { transform: scale(0.95); }
+        .remove-btn { transition: all 0.2s ease; }
+        .remove-btn:hover { color: #dc2626; transform: scale(1.1); }
+        .cart-item { transition: all 0.3s ease; }
+        .cart-item.removing { opacity: 0; transform: translateX(20px); }
+    </style>
+</head>
+<body class="font-secondary text-dark bg-white">
+    <!-- Skip to Content -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-white px-4 py-2 rounded-md">
+        Skip to main content
+    </a>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white shadow-sm">
+        <!-- Top Bar -->
+        <div class="bg-dark text-white py-2">
+            <div class="container mx-auto px-4">
+                <div class="flex justify-between items-center text-sm">
+                    <span>Free shipping on orders over $50</span>
+                    <div class="flex gap-4">
+                        <a href="login.html" class="hover:text-primary transition">Login</a>
+                        <a href="register.html" class="hover:text-primary transition">Register</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Header -->
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <a href="index.html" class="text-3xl font-bold font-primary text-primary">ShopHub</a>
+
+                <!-- Mobile Menu Toggle -->
+                <button id="mobile-menu-toggle" class="lg:hidden text-dark">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+
+                <!-- Navigation -->
+                <nav class="hidden lg:flex items-center gap-8">
+                    <a href="index.html" class="font-medium hover:text-primary transition">Home</a>
+                    <div class="dropdown relative">
+                        <a href="products.html" class="font-medium hover:text-primary transition flex items-center gap-1">
+                            Products <i class="fas fa-chevron-down text-xs"></i>
+                        </a>
+                        <div class="dropdown-content absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2">
+                            <a href="#" class="block px-4 py-2 hover:bg-light transition">Electronics</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-light transition">Clothing</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-light transition">Home & Garden</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-light transition">Sports</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-light transition">Books</a>
+                        </div>
+                    </div>
+                    <a href="about.html" class="font-medium hover:text-primary transition">About</a>
+                    <a href="contact.html" class="font-medium hover:text-primary transition">Contact</a>
+                </nav>
+
+                <!-- Search Bar -->
+                <div class="hidden lg:flex items-center bg-light rounded-full px-4 py-2 max-w-md">
+                    <input type="text" placeholder="Search products..." class="bg-transparent outline-none flex-1">
+                    <button class="text-primary hover:text-secondary transition">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+
+                <!-- Header Actions -->
+                <div class="hidden lg:flex items-center gap-4">
+                    <a href="#" class="text-dark hover:text-primary transition">
+                        <i class="fas fa-user text-xl"></i>
+                    </a>
+                    <a href="cart.html" class="relative text-dark hover:text-primary transition">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <span class="absolute -top-2 -right-2 bg-accent text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Mobile Search -->
+            <div class="lg:hidden mt-4">
+                <div class="flex items-center bg-light rounded-full px-4 py-2">
+                    <input type="text" placeholder="Search products..." class="bg-transparent outline-none flex-1">
+                    <button class="text-primary hover:text-secondary transition">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="fixed top-0 left-0 w-64 h-full bg-white shadow-lg z-50 lg:hidden" style="transform: translateX(-100%); transition: transform 0.3s ease;">
+            <div class="p-4">
+                <button id="mobile-menu-close" class="text-dark hover:text-primary transition mb-4">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+                <nav class="flex flex-col gap-4">
+                    <a href="index.html" class="font-medium hover:text-primary transition">Home</a>
+                    <a href="products.html" class="font-medium hover:text-primary transition">Products</a>
+                    <a href="about.html" class="font-medium hover:text-primary transition">About</a>
+                    <a href="contact.html" class="font-medium hover:text-primary transition">Contact</a>
+                    <a href="login.html" class="font-medium hover:text-primary transition">Login</a>
+                    <a href="register.html" class="font-medium hover:text-primary transition">Register</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="py-8">
+        <div class="container mx-auto px-4">
+            <!-- Breadcrumb -->
+            <nav class="flex items-center space-x-2 text-sm mb-6">
+                <a href="index.html" class="text-gray hover:text-primary transition">Home</a>
+                <span class="text-gray">/</span>
+                <span class="text-primary font-medium">Shopping Cart</span>
+            </nav>
+
+            <h1 class="text-3xl font-bold font-primary mb-8">Shopping Cart</h1>
+
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Cart Items -->
+                <div class="lg:w-2/3">
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <!-- Desktop Table -->
+                        <div class="hidden lg:block overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th class="text-left p-4 font-semibold">Product</th>
+                                        <th class="text-left p-4 font-semibold">Price</th>
+                                        <th class="text-left p-4 font-semibold">Quantity</th>
+                                        <th class="text-left p-4 font-semibold">Total</th>
+                                        <th class="text-left p-4 font-semibold"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Cart Item 1 -->
+                                    <tr class="cart-item border-b border-border" data-item-id="1">
+                                        <td class="p-4">
+                                            <div class="flex items-center">
+                                                <img src="https://picsum.photos/seed/product1/80/80.jpg" alt="Premium Wireless Headphones" class="w-20 h-20 object-cover rounded mr-4">
+                                                <div>
+                                                    <h4 class="font-semibold">Premium Wireless Headphones</h4>
+                                                    <p class="text-gray text-sm">Color: Black</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="p-4">$79.99</td>
+                                        <td class="p-4">
+                                            <div class="flex items-center border border-border rounded">
+                                                <button onclick="updateQuantity(1, -1)" class="quantity-btn px-2 py-1">
+                                                    <i class="fas fa-minus text-sm"></i>
+                                                </button>
+                                                <input type="number" value="1" min="1" max="10" class="w-12 text-center outline-none" id="qty-1">
+                                                <button onclick="updateQuantity(1, 1)" class="quantity-btn px-2 py-1">
+                                                    <i class="fas fa-plus text-sm"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td class="p-4 font-semibold item-total-1">$79.99</td>
+                                        <td class="p-4">
+                                            <button onclick="removeItem(1)" class="remove-btn text-gray hover:text-error transition">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Cart Item 2 -->
+                                    <tr class="cart-item border-b border-border" data-item-id="2">
+                                        <td class="p-4">
+                                            <div class="flex items-center">
+                                                <img src="https://picsum.photos/seed/product2/80/80.jpg" alt="Smart Watch Pro" class="w-20 h-20 object-cover rounded mr-4">
+                                                <div>
+                                                    <h4 class="font-semibold">Smart Watch Pro</h4>
+                                                    <p class="text-gray text-sm">Color: Silver</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="p-4">$199.99</td>
+                                        <td class="p-4">
+                                            <div class="flex items-center border border-border rounded">
+                                                <button onclick="updateQuantity(2, -1)" class="quantity-btn px-2 py-1">
+                                                    <i class="fas fa-minus text-sm"></i>
+                                                </button>
+                                                <input type="number" value="1" min="1" max="10" class="w-12 text-center outline-none" id="qty-2">
+                                                <button onclick="updateQuantity(2, 1)" class="quantity-btn px-2 py-1">
+                                                    <i class="fas fa-plus text-sm"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td class="p-4 font-semibold item-total-2">$199.99</td>
+                                        <td class="p-4">
+                                            <button onclick="removeItem(2)" class="remove-btn text-gray hover:text-error transition">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Cart Item 3 -->
+                                    <tr class="cart-item" data-item-id="3">
+                                        <td class="p-4">
+                                            <div class="flex items-center">
+                                                <img src="https://picsum.photos/seed/product5/80/80.jpg" alt="Fitness Tracker Band" class="w-20 h-20 object-cover rounded mr-4">
+                                                <div>
+                                                    <h4 class="font-semibold">Fitness Tracker Band</h4>
+                                                    <p class="text-gray text-sm">Color: Blue</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="p-4">$59.99</td>
+                                        <td class="p-4">
+                                            <div class="flex items-center border border-border rounded">
+                                                <button onclick="updateQuantity(3, -1)" class="quantity-btn px-2 py-1">
+                                                    <i class="fas fa-minus text-sm"></i>
+                                                </button>
+                                                <input type="number" value="2" min="1" max="10" class="w-12 text-center outline-none" id="qty-3">
+                                                <button onclick="updateQuantity(3, 1)" class="quantity-btn px-2 py-1">
+                                                    <i class="fas fa-plus text-sm"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td class="p-4 font-semibold item-total-3">$119.98</td>
+                                        <td class="p-4">
+                                            <button onclick="removeItem(3)" class="remove-btn text-gray hover:text-error transition">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Mobile Cards -->
+                        <div class="lg:hidden space-y-4 p-4">
+                            <!-- Cart Item 1 -->
+                            <div class="cart-item border border-border rounded-lg p-4" data-item-id="1">
+                                <div class="flex items-start mb-3">
+                                    <img src="https://picsum.photos/seed/product1/80/80.jpg" alt="Premium Wireless Headphones" class="w-20 h-20 object-cover rounded mr-3">
+                                    <div class="flex-1">
+                                        <h4 class="font-semibold">Premium Wireless Headphones</h4>
+                                        <p class="text-gray text-sm">Color: Black</p>
+                                        <p class="text-primary font-bold">$79.99</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center border border-border rounded">
+                                        <button onclick="updateQuantity(1, -1)" class="quantity-btn px-2 py-1">
+                                            <i class="fas fa-minus text-sm"></i>
+                                        </button>
+                                        <input type="number" value="1" min="1" max="10" class="w-12 text-center outline-none" id="mobile-qty-1">
+                                        <button onclick="updateQuantity(1, 1)" class="quantity-btn px-2 py-1">
+                                            <i class="fas fa-plus text-sm"></i>
+                                        </button>
+                                    </div>
+                                    <button onclick="removeItem(1)" class="remove-btn text-gray hover:text-error transition">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Cart Item 2 -->
+                            <div class="cart-item border border-border rounded-lg p-4" data-item-id="2">
+                                <div class="flex items-start mb-3">
+                                    <img src="https://picsum.photos/seed/product2/80/80.jpg" alt="Smart Watch Pro" class="w-20 h-20 object-cover rounded mr-3">
+                                    <div class="flex-1">
+                                        <h4 class="font-semibold">Smart Watch Pro</h4>
+                                        <p class="text-gray text-sm">Color: Silver</p>
+                                        <p class="text-primary font-bold">$199.99</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center border border-border rounded">
+                                        <button onclick="updateQuantity(2, -1)" class="quantity-btn px-2 py-1">
+                                            <i class="fas fa-minus text-sm"></i>
+                                        </button>
+                                        <input type="number" value="1" min="1" max="10" class="w-12 text-center outline-none" id="mobile-qty-2">
+                                        <button onclick="updateQuantity(2, 1)" class="quantity-btn px-2 py-1">
+                                            <i class="fas fa-plus text-sm"></i>
+                                        </button>
+                                    </div>
+                                    <button onclick="removeItem(2)" class="remove-btn text-gray hover:text-error transition">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Cart Item 3 -->
+                            <div class="cart-item border border-border rounded-lg p-4" data-item-id="3">
+                                <div class="flex items-start mb-3">
+                                    <img src="https://picsum.photos/seed/product5/80/80.jpg" alt="Fitness Tracker Band" class="w-20 h-20 object-cover rounded mr-3">
+                                    <div class="flex-1">
+                                        <h4 class="font-semibold">Fitness Tracker Band</h4>
+                                        <p class="text-gray text-sm">Color: Blue</p>
+                                        <p class="text-primary font-bold">$59.99</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center border border-border rounded">
+                                        <button onclick="updateQuantity(3, -1)" class="quantity-btn px-2 py-1">
+                                            <i class="fas fa-minus text-sm"></i>
+                                        </button>
+                                        <input type="number" value="2" min="1" max="10" class="w-12 text-center outline-none" id="mobile-qty-3">
+                                        <button onclick="updateQuantity(3, 1)" class="quantity-btn px-2 py-1">
+                                            <i class="fas fa-plus text-sm"></i>
+                                        </button>
+                                    </div>
+                                    <button onclick="removeItem(3)" class="remove-btn text-gray hover:text-error transition">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cart Actions -->
+                    <div class="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
+                        <a href="products.html" class="flex items-center text-primary hover:text-blue-600 transition">
+                            <i class="fas fa-arrow-left mr-2"></i>
+                            Continue Shopping
+                        </a>
+                        <button onclick="clearCart()" class="flex items-center text-gray hover:text-error transition">
+                            <i class="fas fa-trash mr-2"></i>
+                            Clear Cart
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Cart Summary -->
+                <div class="lg:w-1/3">
+                    <div class="bg-white rounded-lg shadow-md p-6 sticky top-24">
+                        <h2 class="text-xl font-bold font-primary mb-4">Order Summary</h2>
+                        
+                        <div class="space-y-3 mb-4">
+                            <div class="flex justify-between">
+                                <span>Subtotal</span>
+                                <span id="subtotal">$399.96</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Shipping</span>
+                                <span id="shipping">$10.00</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Tax</span>
+                                <span id="tax">$32.00</span>
+                            </div>
+                            <div class="flex justify-between font-bold text-lg pt-3 border-t border-border">
+                                <span>Total</span>
+                                <span id="total">$441.96</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <form onsubmit="applyCoupon(event)" class="flex">
+                                <input type="text" id="coupon-code" placeholder="Coupon code" class="flex-1 border border-border rounded-l px-3 py-2 outline-none focus:border-primary">
+                                <button type="submit" class="bg-primary text-white px-4 py-2 rounded-r hover:bg-blue-600 transition">
+                                    Apply
+                                </button>
+                            </form>
+                        </div>
+                        
+                        <a href="checkout.html" class="block w-full bg-secondary text-white text-center py-3 rounded-lg font-semibold hover:bg-green-600 transition mb-4">
+                            Proceed to Checkout
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                        
+                        <div class="text-center">
+                            <p class="text-gray text-sm mb-2">We accept</p>
+                            <div class="flex justify-center gap-2">
+                                <i class="fab fa-cc-visa text-2xl text-gray"></i>
+                                <i class="fab fa-cc-mastercard text-2xl text-gray"></i>
+                                <i class="fab fa-cc-amex text-2xl text-gray"></i>
+                                <i class="fab fa-cc-paypal text-2xl text-gray"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h3 class="text-xl font-bold font-primary mb-4">About ShopHub</h3>
+                    <p class="text-gray mb-4">ShopHub is your one-stop online store for quality products at affordable prices.</p>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-gray hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray hover:text-white transition"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray hover:text-white transition"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray hover:text-white transition"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold font-primary mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="about.html" class="text-gray hover:text-white transition">About Us</a></li>
+                        <li><a href="contact.html" class="text-gray hover:text-white transition">Contact Us</a></li>
+                        <li><a href="#" class="text-gray hover:text-white transition">Terms & Conditions</a></li>
+                        <li><a href="#" class="text-gray hover:text-white transition">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray hover:text-white transition">FAQs</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold font-primary mb-4">Customer Service</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray hover:text-white transition">Shipping Information</a></li>
+                        <li><a href="#" class="text-gray hover:text-white transition">Returns & Exchanges</a></li>
+                        <li><a href="#" class="text-gray hover:text-white transition">Size Guide</a></li>
+                        <li><a href="#" class="text-gray hover:text-white transition">Track Your Order</a></li>
+                        <li><a href="#" class="text-gray hover:text-white transition">Payment Methods</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold font-primary mb-4">Contact Info</h3>
+                    <ul class="space-y-2 text-gray">
+                        <li><i class="fas fa-map-marker-alt mr-2"></i> 123 Main Street, New York, NY 10001</li>
+                        <li><i class="fas fa-phone mr-2"></i> +1 (123) 456-7890</li>
+                        <li><i class="fas fa-envelope mr-2"></i> info@shophub.com</li>
+                        <li><i class="fas fa-clock mr-2"></i> Mon-Fri: 9am-6pm EST</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray pt-8 text-center text-gray">
+                <p>&copy; 2023 ShopHub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuClose = document.getElementById('mobile-menu-close');
+
+        mobileMenuToggle.addEventListener('click', () => {
+            mobileMenu.style.transform = 'translateX(0)';
+        });
+
+        mobileMenuClose.addEventListener('click', () => {
+            mobileMenu.style.transform = 'translateX(-100%)';
+        });
+
+        // Cart data
+        const cartItems = {
+            1: { price: 79.99, quantity: 1 },
+            2: { price: 199.99, quantity: 1 },
+            3: { price: 59.99, quantity: 2 }
+        };
+
+        // Update quantity
+        function updateQuantity(itemId, change) {
+            const input = document.getElementById(`qty-${itemId}`) || document.getElementById(`mobile-qty-${itemId}`);
+            const currentQuantity = parseInt(input.value);
+            const newQuantity = currentQuantity + change;
+            
+            if (newQuantity >= 1 && newQuantity <= 10) {
+                input.value = newQuantity;
+                cartItems[itemId].quantity = newQuantity;
+                updateCartTotals();
+                updateItemTotal(itemId);
+            }
+        }
+
+        // Update item total
+        function updateItemTotal(itemId) {
+            const item = cartItems[itemId];
+            const total = item.price * item.quantity;
+            const totalElement = document.querySelector(`.item-total-${itemId}`);
+            if (totalElement) {
+                totalElement.textContent = `$${total.toFixed(2)}`;
+            }
+        }
+
+        // Update cart totals
+        function updateCartTotals() {
+            let subtotal = 0;
+            
+            for (const itemId in cartItems) {
+                const item = cartItems[itemId];
+                subtotal += item.price * item.quantity;
+            }
+            
+            const shipping = subtotal >= 50 ? 0 : 10;
+            const tax = subtotal * 0.08;
+            const total = subtotal + shipping + tax;
+            
+            document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('shipping').textContent = `$${shipping.toFixed(2)}`;
+            document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
+            document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+        }
+
+        // Remove item
+        function removeItem(itemId) {
+            const itemElement = document.querySelector(`[data-item-id="${itemId}"]`);
+            itemElement.classList.add('removing');
+            
+            setTimeout(() => {
+                itemElement.remove();
+                delete cartItems[itemId];
+                updateCartTotals();
+                
+                // Check if cart is empty
+                if (Object.keys(cartItems).length === 0) {
+                    showEmptyCart();
+                }
+            }, 300);
+        }
+
+        // Clear cart
+        function clearCart() {
+            if (confirm('Are you sure you want to clear your cart?')) {
+                const items = document.querySelectorAll('.cart-item');
+                items.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.classList.add('removing');
+                        setTimeout(() => {
+                            item.remove();
+                            if (index === items.length - 1) {
+                                showEmptyCart();
+                            }
+                        }, 300);
+                    }, index * 100);
+                });
+                
+                // Clear cart data
+                for (const itemId in cartItems) {
+                    delete cartItems[itemId];
+                }
+                updateCartTotals();
+            }
+        }
+
+        // Show empty cart
+        function showEmptyCart() {
+            const container = document.querySelector('.flex.flex-col.lg\\:flex-row.gap-8');
+            container.innerHTML = `
+                <div class="lg:w-2/3">
+                    <div class="bg-white rounded-lg shadow-md p-8 text-center">
+                        <i class="fas fa-shopping-cart text-6xl text-gray mb-4"></i>
+                        <h2 class="text-2xl font-bold font-primary mb-2">Your cart is empty</h2>
+                        <p class="text-gray mb-6">Looks like you haven't added any products to your cart yet. Start shopping to fill it up!</p>
+                        <a href="products.html" class="inline-block bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition">
+                            <i class="fas fa-shopping-bag mr-2"></i>
+                            Start Shopping
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Apply coupon
+        function applyCoupon(event) {
+            event.preventDefault();
+            const couponCode = document.getElementById('coupon-code').value;
+            
+            if (couponCode) {
+                // Simulate coupon application
+                alert(`Coupon "${couponCode}" has been applied!`);
+                document.getElementById('coupon-code').value = '';
+            }
+        }
+
+        // Initialize cart totals
+        updateCartTotals();
+    </script>
+</body>
+</html>
