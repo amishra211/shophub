@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - ShopHub</title>
+    <meta name="description" content="Create a new ShopHub account to enjoy a personalized shopping experience, faster checkout, and order tracking.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb',
+                        secondary: '#10b981',
+                        accent: '#f59e0b',
+                        dark: '#1f2937',
+                        gray: '#6b7280',
+                        light: '#f9fafb',
+                        border: '#e5e7eb',
+                        success: '#10b981',
+                        error: '#dc2626',
+                        warning: '#f59e0b',
+                        info: '#0284c7'
+                    },
+                    fontFamily: {
+                        'primary': ['Roboto', 'sans-serif'],
+                        'secondary': ['Open Sans', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .font-primary { font-family: 'Roboto', sans-serif; }
+        .font-secondary { font-family: 'Open Sans', 'sans-serif'; }
+        .password-toggle { transition: all 0.2s ease; }
+        .password-toggle:hover { color: #2563eb; }
+        .social-btn { transition: all 0.3s ease; }
+        .social-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .form-input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+        .btn-loading { position: relative; pointer-events: none; opacity: 0.7; }
+        .spinner { border: 2px solid #f3f3f3; border-top: 2px solid #ffffff; border-radius: 50%; width: 16px; height: 16px; animation: spin 1s linear infinite; display: inline-block; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .strength-bar { transition: width 0.3s ease, background-color 0.3s ease; }
+    </style>
+</head>
+<body class="font-secondary text-dark bg-white">
+    <!-- Skip to Content -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-white px-4 py-2 rounded-md">
+        Skip to main content
+    </a>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white shadow-sm">
+        <!-- Top Bar -->
+        <div class="bg-dark text-white py-2">
+            <div class="container mx-auto px-4">
+                <div class="flex justify-between items-center text-sm">
+                    <span>Free shipping on orders over $50</span>
+                    <div class="flex gap-4">
+                        <a href="login.html" class="hover:text-primary transition">Login</a>
+                        <a href="register.html" class="hover:text-primary transition">Register</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Header -->
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <a href="index.html" class="text-3xl font-bold font-primary text-primary">ShopHub</a>
+
+                <!-- Mobile Menu Toggle -->
+                <button id="mobile-menu-toggle" class="lg:hidden text-dark">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+
+                <!-- Navigation -->
+                <nav class="hidden lg:flex items-center gap-8">
+                    <a href="index.html" class="font-medium hover:text-primary transition">Home</a>
+                    <div class="dropdown relative">
+                        <a href="products.html" class="font-medium hover:text-primary transition flex items-center gap-1">
+                            Products <i class="fas fa-chevron-down text-xs"></i>
+                        </a>
+                        <div class="dropdown-content absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2">
+                            <a href="#" class="block px-4 py-2 hover:bg-light transition">Electronics</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-light transition">Clothing</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-light transition">Home & Garden</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-light transition">Sports</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-light transition">Books</a>
+                        </div>
+                    </div>
+                    <a href="about.html" class="font-medium hover:text-primary transition">About</a>
+                    <a href="contact.html" class="font-medium hover:text-primary transition">Contact</a>
+                </nav>
+
+                <!-- Search Bar -->
+                <div class="hidden lg:flex items-center bg-light rounded-full px-4 py-2 max-w-md">
+                    <input type="text" placeholder="Search products..." class="bg-transparent outline-none flex-1">
+                    <button class="text-primary hover:text-secondary transition">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+
+                <!-- Header Actions -->
+                <div class="hidden lg:flex items-center gap-4">
+                    <a href="#" class="text-dark hover:text-primary transition">
+                        <i class="fas fa-user text-xl"></i>
+                    </a>
+                    <a href="cart.html" class="relative text-dark hover:text-primary transition">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <span class="absolute -top-2 -right-2 bg-accent text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Mobile Search -->
+            <div class="lg:hidden mt-4">
+                <div class="flex items-center bg-light rounded-full px-4 py-2">
+                    <input type="text" placeholder="Search products..." class="bg-transparent outline-none flex-1">
+                    <button class="text-primary hover:text-secondary transition">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="fixed top-0 left-0 w-64 h-full bg-white shadow-lg z-50 lg:hidden" style="transform: translateX(-100%); transition: transform 0.3s ease;">
+            <div class="p-4">
+                <button id="mobile-menu-close" class="text-dark hover:text-primary transition mb-4">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+                <nav class="flex flex-col gap-4">
+                    <a href="index.html" class="font-medium hover:text-primary transition">Home</a>
+                    <a href="products.html" class="font-medium hover:text-primary transition">Products</a>
+                    <a href="about.html" class="font-medium hover:text-primary transition">About</a>
+                    <a href="contact.html" class="font-medium hover:text-primary transition">Contact</a>
+                    <a href="login.html" class="font-medium hover:text-primary transition">Login</a>
+                    <a href="register.html" class="font-medium text-primary hover:text-primary transition">Register</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="py-8 min-h-screen">
+        <div class="container mx-auto px-4">
+            <div class="max-w-md mx-auto">
+                <div class="bg-white rounded-lg shadow-md p-8">
+                    <h2 class="text-2xl font-bold font-primary text-center mb-6">Create Your Account</h2>
+                    
+                    <div id="register-success" class="bg-success bg-opacity-10 border border-success text-success px-4 py-3 rounded mb-4" style="display: none;">
+                        <i class="fas fa-check-circle mr-2"></i>
+                        Your account has been created successfully! You will be redirected to the login page.
+                    </div>
+                    
+                    <form id="register-form" onsubmit="handleRegister(event)">
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label for="first-name" class="block text-sm font-medium mb-2">First Name</label>
+                                <input type="text" id="first-name" class="form-input w-full border border-border rounded px-3 py-2 outline-none" placeholder="Enter your first name" required>
+                            </div>
+                            <div>
+                                <label for="last-name" class="block text-sm font-medium mb-2">Last Name</label>
+                                <input type="text" id="last-name" class="form-input w-full border border-border rounded px-3 py-2 outline-none" placeholder="Enter your last name" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="email" class="block text-sm font-medium mb-2">Email Address</label>
+                            <input type="email" id="email" class="form-input w-full border border-border rounded px-3 py-2 outline-none" placeholder="Enter your email" required>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="phone" class="block text-sm font-medium mb-2">Phone Number (Optional)</label>
+                            <input type="tel" id="phone" class="form-input w-full border border-border rounded px-3 py-2 outline-none" placeholder="Enter your phone number">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="password" class="block text-sm font-medium mb-2">Password</label>
+                            <div class="relative">
+                                <input type="password" id="password" class="form-input w-full border border-border rounded px-3 py-2 outline-none pr-10" placeholder="Create a password" required oninput="checkPasswordStrength()">
+                                <button type="button" onclick="togglePassword('password')" class="password-toggle absolute right-3 top-1/2 transform -translate-y-1/2 text-gray">
+                                    <i class="fas fa-eye" id="password-icon"></i>
+                                </button>
+                            </div>
+                            <div class="mt-2">
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="text-xs">Password Strength:</span>
+                                    <span class="text-xs" id="strength-text">Weak</span>
+                                </div>
+                                <div class="w-full bg-border rounded-full h-1">
+                                    <div class="strength-bar h-1 rounded-full" id="strength-bar" style="width: 25%; background-color: #dc2626;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="confirm-password" class="block text-sm font-medium mb-2">Confirm Password</label>
+                            <div class="relative">
+                                <input type="password" id="confirm-password" class="form-input w-full border border-border rounded px-3 py-2 outline-none pr-10" placeholder="Confirm your password" required oninput="checkPasswordMatch()">
+                                <button type="button" onclick="togglePassword('confirm-password')" class="password-toggle absolute right-3 top-1/2 transform -translate-y-1/2 text-gray">
+                                    <i class="fas fa-eye" id="confirm-password-icon"></i>
+                                </button>
+                            </div>
+                            <div class="mt-2">
+                                <span class="text-xs" id="match-text">
+                                    <i class="fas fa-times-circle text-error mr-1"></i>
+                                    Passwords do not match
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center mb-4">
+                            <input type="checkbox" id="terms" class="mr-2" required>
+                            <label for="terms" class="text-sm">I agree to the <a href="#" class="text-primary hover:underline">Terms and Conditions</a> and <a href="#" class="text-primary hover:underline">Privacy Policy</a></label>
+                        </div>
+                        
+                        <div class="flex items-center mb-6">
+                            <input type="checkbox" id="newsletter" class="mr-2">
+                            <label for="newsletter" class="text-sm">Subscribe to our newsletter for exclusive offers and updates</label>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-blue-600 transition mb-4">
+                            <span id="register-text">Create Account</span>
+                            <span class="spinner" style="display: none;" id="register-spinner"></span>
+                        </button>
+                    </form>
+                    
+                    <div class="relative mb-6">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-border"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-2 bg-white text-gray">Or sign up with</span>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <button class="social-btn bg-white border border-border rounded-lg py-2 px-4 flex items-center justify-center hover:bg-light transition">
+                            <i class="fab fa-google text-red-500 mr-2"></i>
+                            Google
+                        </button>
+                        <button class="social-btn bg-white border border-border rounded-lg py-2 px-4 flex items-center justify-center hover:bg-light transition">
+                            <i class="fab fa-facebook-f text-blue-600 mr-2"></i>
+                            Facebook
+                        </button>
+                    </div>
+                    
+                    <div class="text-center mt-6">
+                        <p class="text-gray">
+                            Already have an account? 
+                            <a href="login.html" class="text-primary hover:text-blue-600 transition font-medium">Login</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h3 class="text-xl font-bold font-primary mb-4">About ShopHub</h3>
+                    <p class="text-gray mb-4">ShopHub is your one-stop online store for quality products at affordable prices.</p>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-gray hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray hover:text-white transition"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray hover:text-white transition"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray hover:text-white transition"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold font-primary mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="about.html" class="text-gray hover:text-white transition">About Us</a></li>
+                        <li><a href="contact.html" class="text-gray hover:text-white transition">Contact Us</a></li>
+                        <li><a href="#" class="text-gray hover:text-white transition">Terms & Conditions</a></li>
+                        <li><a href="#" class="text-gray hover:text-white transition">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray hover:text-white transition">FAQs</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold font-primary mb-4">Customer Service</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray hover:text-white transition">Shipping Information</a></li>
+                        <li><a href="#" class="text-gray hover:text-white transition">Returns & Exchanges</a></li>
+                        <li><a href="#" class="text-gray hover:text-white transition">Size Guide</a></li>
+                        <li><a href="#" class="text-gray hover:text-white transition">Track Your Order</a></li>
+                        <li><a href="#" class="text-gray hover:text-white transition">Payment Methods</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold font-primary mb-4">Contact Info</h3>
+                    <ul class="space-y-2 text-gray">
+                        <li><i class="fas fa-map-marker-alt mr-2"></i> 123 Main Street, New York, NY 10001</li>
+                        <li><i class="fas fa-phone mr-2"></i> +1 (123) 456-7890</li>
+                        <li><i class="fas fa-envelope mr-2"></i> info@shophub.com</li>
+                        <li><i class="fas fa-clock mr-2"></i> Mon-Fri: 9am-6pm EST</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray pt-8 text-center text-gray">
+                <p>&copy; 2023 ShopHub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuClose = document.getElementById('mobile-menu-close');
+
+        mobileMenuToggle.addEventListener('click', () => {
+            mobileMenu.style.transform = 'translateX(0)';
+        });
+
+        mobileMenuClose.addEventListener('click', () => {
+            mobileMenu.style.transform = 'translateX(-100%)';
+        });
+
+        // Password visibility toggle
+        function togglePassword(fieldId) {
+            const passwordInput = document.getElementById(fieldId);
+            const passwordIcon = document.getElementById(fieldId + '-icon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordIcon.classList.remove('fa-eye');
+                passwordIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                passwordIcon.classList.remove('fa-eye-slash');
+                passwordIcon.classList.add('fa-eye');
+            }
+        }
+
+        // Check password strength
+        function checkPasswordStrength() {
+            const password = document.getElementById('password').value;
+            const strengthBar = document.getElementById('strength-bar');
+            const strengthText = document.getElementById('strength-text');
+            
+            let strength = 0;
+            
+            // Check password length
+            if (password.length >= 8) {
+                strength += 25;
+            }
+            
+            // Check for lowercase letters
+            if (/[a-z]/.test(password)) {
+                strength += 25;
+            }
+            
+            // Check for uppercase letters
+            if (/[A-Z]/.test(password)) {
+                strength += 25;
+            }
+            
+            // Check for numbers or special characters
+            if (/[0-9]/.test(password) || /[^a-zA-Z0-9]/.test(password)) {
+                strength += 25;
+            }
+            
+            // Update strength bar and text
+            strengthBar.style.width = strength + '%';
+            
+            if (strength <= 25) {
+                strengthBar.style.backgroundColor = '#dc2626';
+                strengthText.textContent = 'Weak';
+                strengthText.style.color = '#dc2626';
+            } else if (strength <= 50) {
+                strengthBar.style.backgroundColor = '#f59e0b';
+                strengthText.textContent = 'Fair';
+                strengthText.style.color = '#f59e0b';
+            } else if (strength <= 75) {
+                strengthBar.style.backgroundColor = '#f59e0b';
+                strengthText.textContent = 'Good';
+                strengthText.style.color = '#f59e0b';
+            } else {
+                strengthBar.style.backgroundColor = '#10b981';
+                strengthText.textContent = 'Strong';
+                strengthText.style.color = '#10b981';
+            }
+            
+            // Check password match
+            checkPasswordMatch();
+        }
+
+        // Check if passwords match
+        function checkPasswordMatch() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const matchText = document.getElementById('match-text');
+            
+            if (confirmPassword === '') {
+                matchText.innerHTML = '<i class="fas fa-times-circle text-error mr-1"></i>Passwords do not match';
+                return;
+            }
+            
+            if (password === confirmPassword) {
+                matchText.innerHTML = '<i class="fas fa-check-circle text-success mr-1"></i>Passwords match';
+            } else {
+                matchText.innerHTML = '<i class="fas fa-times-circle text-error mr-1"></i>Passwords do not match';
+            }
+        }
+
+        // Handle registration
+        function handleRegister(event) {
+            event.preventDefault();
+            
+            // Check if passwords match
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            
+            if (password !== confirmPassword) {
+                alert('Passwords do not match. Please try again.');
+                return;
+            }
+            
+            // Hide any previous success messages
+            document.getElementById('register-success').style.display = 'none';
+            
+            // Show loading state
+            document.getElementById('register-text').style.display = 'none';
+            document.getElementById('register-spinner').style.display = 'inline-block';
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Reset loading state
+                document.getElementById('register-text').style.display = 'inline';
+                document.getElementById('register-spinner').style.display = 'none';
+                
+                // Show success message
+                document.getElementById('register-success').style.display = 'block';
+                
+                // Scroll to success message
+                document.getElementById('register-success').scrollIntoView({ behavior: 'smooth' });
+                
+                // Reset form
+                document.getElementById('register-form').reset();
+                
+                // Reset password strength indicator
+                document.getElementById('strength-bar').style.width = '25%';
+                document.getElementById('strength-bar').style.backgroundColor = '#dc2626';
+                document.getElementById('strength-text').textContent = 'Weak';
+                document.getElementById('strength-text').style.color = '#dc2626';
+                
+                // Reset password match indicator
+                document.getElementById('match-text').innerHTML = '<i class="fas fa-times-circle text-error mr-1"></i>Passwords do not match';
+                
+                // Redirect to login page after 3 seconds
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 3000);
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
