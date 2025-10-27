@@ -3,22 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShopHub - Your One-Stop Online Store</title>
-    <meta name="description" content="ShopHub offers a wide range of quality products at affordable prices. Shop now for the best deals!">
+    <title>ELEKTROBUY - Electronics Store</title>
+    <meta name="description" content="ELEKTROBUY offers a wide range of quality electronics at affordable prices. Shop now for the best deals!">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: '#2563eb',
-                        secondary: '#10b981',
-                        accent: '#f59e0b',
-                        dark: '#1f2937',
-                        gray: '#6b7280',
-                        light: '#f9fafb',
-                        border: '#e5e7eb',
+                        primary: '#0066cc',
+                        secondary: '#f5f5f5',
+                        accent: '#ff3333',
+                        dark: '#333333',
+                        gray: '#666666',
+                        light: '#f9f9f9',
+                        border: '#e0e0e0',
                         success: '#10b981',
                         error: '#dc2626',
                         warning: '#f59e0b',
@@ -39,7 +42,10 @@
                     animation: {
                         'fade-in': 'fadeIn 0.5s ease-in-out',
                         'slide-up': 'slideUp 0.3s ease-out',
-                        'bounce-in': 'bounceIn 0.6s ease-out'
+                        'bounce-in': 'bounceIn 0.6s ease-out',
+                        'float': 'float 3s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s infinite',
+                        'shimmer': 'shimmer 2s infinite'
                     },
                     keyframes: {
                         fadeIn: {
@@ -55,6 +61,14 @@
                             '50%': { transform: 'scale(1.05)' },
                             '70%': { transform: 'scale(0.9)' },
                             '100%': { transform: 'scale(1)', opacity: '1' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-1000px 0' },
+                            '100%': { backgroundPosition: '1000px 0' }
                         }
                     }
                 }
@@ -64,7 +78,7 @@
     <style>
         .font-primary { font-family: 'Roboto', sans-serif; }
         .font-secondary { font-family: 'Open Sans', sans-serif; }
-        .hero-gradient { background: linear-gradient(135deg, rgba(37, 99, 235, 0.9), rgba(16, 185, 129, 0.9)); }
+        .hero-gradient { background: linear-gradient(135deg, rgba(0, 102, 204, 0.8), rgba(0, 102, 204, 0.6)); }
         .card-hover { transition: all 0.3s ease; }
         .card-hover:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         .mobile-menu { transform: translateX(-100%); transition: transform 0.3s ease; }
@@ -81,7 +95,70 @@
             50% { transform: scale(1.05); }
         }
         .scroll-smooth { scroll-behavior: smooth; }
-        .gradient-text { background: linear-gradient(135deg, #2563eb, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .gradient-text { background: linear-gradient(135deg, #0066cc, #004499); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .dark-mode { background-color: #1a1a1a; color: #f0f0f0; }
+        .dark-mode .bg-white { background-color: #2a2a2a; }
+        .dark-mode .text-dark { color: #f0f0f0; }
+        .dark-mode .text-gray { color: #b0b0b0; }
+        .dark-mode .bg-light { background-color: #333333; }
+        .dark-mode .border { border-color: #444444; }
+        .dark-mode .shadow-md { box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); }
+        .shimmer { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 1000px 100%; animation: shimmer 2s infinite; }
+        .lazy-load { opacity: 0; transition: opacity 0.3s; }
+        .lazy-load.loaded { opacity: 1; }
+        .cart-sidebar { transform: translateX(100%); transition: transform 0.3s ease; }
+        .cart-sidebar.active { transform: translateX(0); }
+        .backdrop { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 40; }
+        .backdrop.active { display: block; }
+        .search-autocomplete { position: absolute; top: 100%; left: 0; right: 0; background-color: white; border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); z-index: 20; max-height: 300px; overflow-y: auto; }
+        .dark-mode .search-autocomplete { background-color: #2a2a2a; }
+        .quick-view-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 50; align-items: center; justify-content: center; }
+        .quick-view-modal.active { display: flex; }
+        .product-gallery { position: relative; }
+        .product-gallery .main-image { width: 100%; height: 400px; object-fit: cover; border-radius: 0.5rem; }
+        .product-gallery .thumbnails { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+        .product-gallery .thumbnail { width: 80px; height: 80px; object-fit: cover; border-radius: 0.25rem; cursor: pointer; opacity: 0.7; transition: opacity 0.3s; }
+        .product-gallery .thumbnail:hover, .product-gallery .thumbnail.active { opacity: 1; }
+        .wishlist-btn { position: absolute; top: 0.5rem; right: 0.5rem; background-color: white; border-radius: 50%; width: 2rem; height: 2rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; }
+        .wishlist-btn:hover { background-color: #f59e0b; color: white; }
+        .wishlist-btn.active { background-color: #f59e0b; color: white; }
+        .compare-btn { position: absolute; bottom: 0.5rem; right: 0.5rem; background-color: white; border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; cursor: pointer; transition: all 0.3s; }
+        .compare-btn:hover { background-color: #10b981; color: white; }
+        .compare-btn.active { background-color: #10b981; color: white; }
+        .back-to-top { position: fixed; bottom: 2rem; right: 2rem; background-color: #0066cc; color: white; border-radius: 50%; width: 3rem; height: 3rem; display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0; visibility: hidden; transition: all 0.3s; z-index: 30; }
+        .back-to-top.visible { opacity: 1; visibility: visible; }
+        .back-to-top:hover { background-color: #0055aa; }
+        .filter-sidebar { transform: translateX(-100%); transition: transform 0.3s ease; }
+        .filter-sidebar.active { transform: translateX(0); }
+        .price-range { position: relative; }
+        .price-range input[type="range"] { width: 100%; -webkit-appearance: none; height: 5px; border-radius: 5px; background: #e5e7eb; outline: none; }
+        .price-range input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #0066cc; cursor: pointer; }
+        .price-range input[type="range"]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: #0066cc; cursor: pointer; }
+        .newsletter-feedback { position: fixed; top: 5rem; right: -300px; background-color: white; border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); padding: 1rem; transition: right 0.3s ease; z-index: 40; }
+        .newsletter-feedback.show { right: 1rem; }
+        .dark-mode .newsletter-feedback { background-color: #2a2a2a; }
+        .loading-spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(255, 255, 255, 0.3); border-radius: 50%; border-top-color: white; animation: spin 1s ease-in-out infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        /* Enhanced styles */
+        .hero-overlay { background: linear-gradient(135deg, rgba(0, 102, 204, 0.9), rgba(0, 51, 102, 0.8)); }
+        .category-card { transition: all 0.3s ease; }
+        .category-card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.15); }
+        .product-badge { position: absolute; top: 10px; left: 10px; background-color: #ff3333; color: white; padding: 5px 10px; border-radius: 4px; font-weight: bold; font-size: 0.8rem; }
+        .product-price { font-size: 1.25rem; font-weight: 700; color: #0066cc; }
+        .product-original-price { text-decoration: line-through; color: #999; font-size: 0.9rem; margin-right: 8px; }
+        .product-discount { background-color: #ff3333; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
+        .sale-banner { background: linear-gradient(90deg, #ff3333, #ff5555); }
+        .testimonial-card { background-color: white; border-radius: 8px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.3s ease; }
+        .testimonial-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .brand-logo { filter: grayscale(100%); opacity: 0.7; transition: all 0.3s ease; }
+        .brand-logo:hover { filter: grayscale(0%); opacity: 1; }
+        .countdown-timer { display: flex; gap: 10px; justify-content: center; margin: 20px 0; }
+        .countdown-item { background-color: rgba(255,255,255,0.2); border-radius: 5px; padding: 10px 15px; text-align: center; min-width: 60px; }
+        .countdown-value { font-size: 1.5rem; font-weight: bold; display: block; }
+        .countdown-label { font-size: 0.8rem; text-transform: uppercase; }
+        .feature-icon { font-size: 2rem; color: #0066cc; margin-bottom: 15px; }
+        .newsletter-bg { background: linear-gradient(135deg, #0066cc, #004499); }
     </style>
 </head>
 <body class="font-secondary text-dark bg-white scroll-smooth">
@@ -89,6 +166,30 @@
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-white px-4 py-2 rounded-md">
         Skip to main content
     </a>
+
+    <!-- Backdrop for mobile menu and cart -->
+    <div id="backdrop" class="backdrop"></div>
+
+    <!-- Back to Top Button -->
+    <div id="back-to-top" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- Newsletter Feedback -->
+    <div id="newsletter-feedback" class="newsletter-feedback">
+        <div class="flex items-center">
+            <div class="flex-shrink-0">
+                <i class="fas fa-check-circle text-success text-xl"></i>
+            </div>
+            <div class="ml-3">
+                <p class="text-sm font-medium">Thank you for subscribing!</p>
+                <p class="text-sm text-gray">You'll receive our latest updates.</p>
+            </div>
+            <button id="close-feedback" class="ml-auto text-gray hover:text-dark">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
 
     <!-- Header -->
     <header class="sticky top-0 z-50 bg-white shadow-sm">
@@ -109,7 +210,7 @@
         <div class="container mx-auto px-4 py-4">
             <div class="flex justify-between items-center">
                 <!-- Logo -->
-                <a href="index.html" class="text-3xl font-bold font-primary text-primary">ShopHub</a>
+                <a href="index.html" class="text-3xl font-bold font-primary text-primary">ELEKTROBUY</a>
 
                 <!-- Mobile Menu Toggle -->
                 <button id="mobile-menu-toggle" class="lg:hidden text-dark">
@@ -124,11 +225,12 @@
                             Products <i class="fas fa-chevron-down text-xs"></i>
                         </a>
                         <div class="dropdown-content absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2">
-                            <a href="#" class="block px-4 py-2 hover:bg-light transition">Electronics</a>
-                            <a href="#" class="block px-4 py-2 hover:bg-light transition">Clothing</a>
-                            <a href="#" class="block px-4 py-2 hover:bg-light transition">Home & Garden</a>
-                            <a href="#" class="block px-4 py-2 hover:bg-light transition">Sports</a>
-                            <a href="#" class="block px-4 py-2 hover:bg-light transition">Books</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-light transition">Headphones</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-light transition">Smartwatches</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-light transition">Laptops</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-light transition">Gaming</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-light transition">Speakers</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-light transition">VR</a>
                         </div>
                     </div>
                     <a href="about.html" class="font-medium hover:text-primary transition">About</a>
@@ -136,11 +238,14 @@
                 </nav>
 
                 <!-- Search Bar -->
-                <div class="hidden lg:flex items-center bg-light rounded-full px-4 py-2 max-w-md">
-                    <input type="text" placeholder="Search products..." class="bg-transparent outline-none flex-1">
-                    <button class="text-primary hover:text-secondary transition">
+                <div class="hidden lg:flex items-center bg-light rounded-full px-4 py-2 max-w-md relative">
+                    <input type="text" id="search-input" placeholder="Search products..." class="bg-transparent outline-none flex-1">
+                    <button id="search-btn" class="text-primary hover:text-secondary transition">
                         <i class="fas fa-search"></i>
                     </button>
+                    <div id="search-autocomplete" class="search-autocomplete hidden">
+                        <!-- Search results will be populated here -->
+                    </div>
                 </div>
 
                 <!-- Header Actions -->
@@ -148,10 +253,14 @@
                     <a href="#" class="text-dark hover:text-primary transition">
                         <i class="fas fa-user text-xl"></i>
                     </a>
-                    <a href="cart.html" class="relative text-dark hover:text-primary transition">
+                    <button id="wishlist-toggle" class="text-dark hover:text-primary transition relative">
+                        <i class="fas fa-heart text-xl"></i>
+                        <span class="absolute -top-2 -right-2 bg-accent text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                    </button>
+                    <button id="cart-toggle" class="relative text-dark hover:text-primary transition">
                         <i class="fas fa-shopping-cart text-xl"></i>
                         <span class="absolute -top-2 -right-2 bg-accent text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
-                    </a>
+                    </button>
                 </div>
             </div>
 
@@ -165,62 +274,209 @@
                 </div>
             </div>
         </div>
+    </header>
 
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="mobile-menu fixed top-0 left-0 w-64 h-full bg-white shadow-lg z-50 lg:hidden">
-            <div class="p-4">
-                <button id="mobile-menu-close" class="text-dark hover:text-primary transition mb-4">
-                    <i class="fas fa-times text-xl"></i>
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="mobile-menu fixed top-0 left-0 w-64 h-full bg-white shadow-lg z-50 lg:hidden">
+        <div class="p-4">
+            <button id="mobile-menu-close" class="text-dark hover:text-primary transition mb-4">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <nav class="flex flex-col gap-4">
+                <a href="index.html" class="font-medium hover:text-primary transition">Home</a>
+                <a href="products.html" class="font-medium hover:text-primary transition">Products</a>
+                <a href="about.html" class="font-medium hover:text-primary transition">About</a>
+                <a href="contact.html" class="font-medium hover:text-primary transition">Contact</a>
+                <a href="login.html" class="font-medium hover:text-primary transition">Login</a>
+                <a href="register.html" class="font-medium hover:text-primary transition">Register</a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div id="cart-sidebar" class="cart-sidebar fixed top-0 right-0 w-80 h-full bg-white shadow-lg z-50">
+        <div class="p-4 border-b flex justify-between items-center">
+            <h3 class="text-lg font-semibold">Shopping Cart</h3>
+            <button id="cart-close" class="text-dark hover:text-primary transition">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+        <div class="p-4 overflow-y-auto" style="height: calc(100% - 180px);">
+            <!-- Cart items will be populated here -->
+            <div class="flex items-center mb-4 pb-4 border-b">
+                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=80&h=80&q=80" alt="Product" class="w-16 h-16 object-cover rounded">
+                <div class="ml-4 flex-1">
+                    <h4 class="font-medium">Premium Wireless Headphones</h4>
+                    <p class="text-sm text-gray">$455.00 x 1</p>
+                </div>
+                <button class="text-gray hover:text-error transition">
+                    <i class="fas fa-trash"></i>
                 </button>
-                <nav class="flex flex-col gap-4">
-                    <a href="index.html" class="font-medium hover:text-primary transition">Home</a>
-                    <a href="products.html" class="font-medium hover:text-primary transition">Products</a>
-                    <a href="about.html" class="font-medium hover:text-primary transition">About</a>
-                    <a href="contact.html" class="font-medium hover:text-primary transition">Contact</a>
-                    <a href="login.html" class="font-medium hover:text-primary transition">Login</a>
-                    <a href="register.html" class="font-medium hover:text-primary transition">Register</a>
-                </nav>
+            </div>
+            <div class="flex items-center mb-4 pb-4 border-b">
+                <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=80&h=80&q=80" alt="Product" class="w-16 h-16 object-cover rounded">
+                <div class="ml-4 flex-1">
+                    <h4 class="font-medium">Smart Watch Pro</h4>
+                    <p class="text-sm text-gray">$555.00 x 1</p>
+                </div>
+                <button class="text-gray hover:text-error transition">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+            <div class="flex items-center mb-4 pb-4 border-b">
+                <img src="https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=80&h=80&q=80" alt="Product" class="w-16 h-16 object-cover rounded">
+                <div class="ml-4 flex-1">
+                    <h4 class="font-medium">Gaming Console</h4>
+                    <p class="text-sm text-gray">$699.00 x 1</p>
+                </div>
+                <button class="text-gray hover:text-error transition">
+                    <i class="fas fa-trash"></i>
+                </button>
             </div>
         </div>
-    </header>
+        <div class="p-4 border-t">
+            <div class="flex justify-between mb-4">
+                <span class="font-semibold">Total:</span>
+                <span class="font-semibold">$1,709.00</span>
+            </div>
+            <button class="w-full bg-primary text-white py-2 rounded hover:bg-blue-600 transition">
+                Checkout
+            </button>
+        </div>
+    </div>
 
     <!-- Main Content -->
     <main id="main-content">
         <!-- Hero Section -->
         <section class="relative h-96 lg:h-[500px] overflow-hidden">
             <div class="absolute inset-0">
-                <img src="https://picsum.photos/seed/hero/1920/500.jpg" alt="Hero Banner" class="w-full h-full object-cover">
-                <div class="hero-gradient absolute inset-0"></div>
+                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80" alt="Wireless Headphones" class="w-full h-full object-cover">
+                <div class="hero-overlay absolute inset-0"></div>
             </div>
             <div class="relative container mx-auto px-4 h-full flex items-center">
                 <div class="text-white max-w-2xl animate-fade-in">
-                    <h1 class="text-4xl lg:text-6xl font-bold font-primary mb-4">Summer Sale Up to 50% Off</h1>
-                    <p class="text-xl mb-8 opacity-90">Discover amazing deals on your favorite products. Limited time offer!</p>
+                    <h1 class="text-4xl lg:text-6xl font-bold font-primary mb-4">Wireless HEADPHONE</h1>
+                    <p class="text-xl mb-8 opacity-90">Experience premium sound quality with our latest wireless headphones</p>
                     <a href="products.html" class="inline-block bg-white text-primary px-8 py-3 rounded-full font-semibold hover:bg-light transition transform hover:scale-105">
+                        Shop By Category
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories Section -->
+        <section class="py-16 lg:py-24">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+                    <!-- Category 1 -->
+                    <div class="category-card bg-white rounded-lg shadow-md overflow-hidden text-center">
+                        <div class="p-6">
+                            <img src="https://images.unsplash.com/photo-1588423771073-b8903fbb85b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&h=200&q=80" alt="Earbuds" class="w-full h-32 object-contain mb-4">
+                            <h3 class="font-semibold">Earbuds</h3>
+                        </div>
+                    </div>
+
+                    <!-- Category 2 -->
+                    <div class="category-card bg-white rounded-lg shadow-md overflow-hidden text-center">
+                        <div class="p-6">
+                            <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&h=200&q=80" alt="Smartwatch" class="w-full h-32 object-contain mb-4">
+                            <h3 class="font-semibold">Smartwatch</h3>
+                        </div>
+                    </div>
+
+                    <!-- Category 3 -->
+                    <div class="category-card bg-white rounded-lg shadow-md overflow-hidden text-center">
+                        <div class="p-6">
+                            <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&h=200&q=80" alt="Laptop" class="w-full h-32 object-contain mb-4">
+                            <h3 class="font-semibold">Laptop</h3>
+                        </div>
+                    </div>
+
+                    <!-- Category 4 -->
+                    <div class="category-card bg-white rounded-lg shadow-md overflow-hidden text-center">
+                        <div class="p-6">
+                            <img src="https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&h=200&q=80" alt="Gaming" class="w-full h-32 object-contain mb-4">
+                            <h3 class="font-semibold">Gaming</h3>
+                        </div>
+                    </div>
+
+                    <!-- Category 5 -->
+                    <div class="category-card bg-white rounded-lg shadow-md overflow-hidden text-center">
+                        <div class="p-6">
+                            <img src="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&h=200&q=80" alt="Speakers" class="w-full h-32 object-contain mb-4">
+                            <h3 class="font-semibold">Speakers</h3>
+                        </div>
+                    </div>
+
+                    <!-- Category 6 -->
+                    <div class="category-card bg-white rounded-lg shadow-md overflow-hidden text-center">
+                        <div class="p-6">
+                            <img src="https://images.unsplash.com/photo-1592478411213-6153e4ebc07d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&h=200&q=80" alt="VR" class="w-full h-32 object-contain mb-4">
+                            <h3 class="font-semibold">VR</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Summer Sale Banner -->
+        <section class="py-8">
+            <div class="container mx-auto px-4">
+                <div class="sale-banner text-white rounded-lg p-8 text-center">
+                    <h2 class="text-3xl lg:text-4xl font-bold font-primary mb-4">FINE SMILE Summer sale</h2>
+                    <p class="text-xl mb-6">Get up to 50% off on selected items</p>
+                    
+                    <!-- Countdown Timer -->
+                    <div class="countdown-timer">
+                        <div class="countdown-item">
+                            <span class="countdown-value" id="days">05</span>
+                            <span class="countdown-label">Days</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span class="countdown-value" id="hours">12</span>
+                            <span class="countdown-label">Hours</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span class="countdown-value" id="minutes">45</span>
+                            <span class="countdown-label">Minutes</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span class="countdown-value" id="seconds">30</span>
+                            <span class="countdown-label">Seconds</span>
+                        </div>
+                    </div>
+                    
+                    <a href="products.html" class="inline-block bg-white text-accent px-8 py-3 rounded-full font-semibold hover:bg-light transition transform hover:scale-105">
                         Shop Now
                     </a>
                 </div>
             </div>
         </section>
 
-        <!-- Featured Products -->
-        <section class="py-16 lg:py-24">
+        <!-- Best Seller Products -->
+        <section class="py-16 lg:py-24 bg-light">
             <div class="container mx-auto px-4">
                 <div class="text-center mb-12">
-                    <h2 class="text-3xl lg:text-4xl font-bold font-primary mb-4">Featured Products</h2>
+                    <h2 class="text-3xl lg:text-4xl font-bold font-primary mb-4">Best Seller Products</h2>
                     <p class="text-gray text-lg max-w-2xl mx-auto">Check out our most popular products this week</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <!-- Product 1 -->
                     <div class="card-hover bg-white rounded-lg shadow-md overflow-hidden">
                         <div class="product-image-hover relative">
-                            <img src="https://picsum.photos/seed/product1/300/300.jpg" alt="Wireless Headphones" class="w-full h-48 object-cover">
-                            <span class="absolute top-2 right-2 bg-accent text-white px-2 py-1 rounded text-sm font-semibold">Sale</span>
+                            <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&h=300&q=80" alt="Beats Headphones" class="w-full h-48 object-cover">
+                            <span class="product-badge">-20%</span>
+                            <button class="wishlist-btn">
+                                <i class="far fa-heart"></i>
+                            </button>
                         </div>
                         <div class="p-4">
-                            <h3 class="font-semibold text-lg mb-2">Premium Wireless Headphones</h3>
-                            <div class="text-primary font-bold text-xl mb-2">$79.99</div>
+                            <h3 class="font-semibold text-lg mb-2">Beats Headphones</h3>
+                            <div class="flex items-center mb-3">
+                                <span class="product-original-price">$569.00</span>
+                                <span class="product-price">$455.00</span>
+                            </div>
                             <div class="flex items-center mb-3">
                                 <div class="star-rating">
                                     <i class="fas fa-star"></i>
@@ -231,20 +487,27 @@
                                 </div>
                                 <span class="text-gray text-sm ml-2">(24)</span>
                             </div>
-                            <a href="product-detail.html" class="block w-full bg-primary text-white text-center py-2 rounded hover:bg-blue-600 transition">
+                            <button class="w-full bg-primary text-white py-2 rounded hover:bg-blue-600 transition add-to-cart-btn" data-product="1">
                                 Add to Cart
-                            </a>
+                            </button>
                         </div>
                     </div>
 
                     <!-- Product 2 -->
                     <div class="card-hover bg-white rounded-lg shadow-md overflow-hidden">
-                        <div class="product-image-hover">
-                            <img src="https://picsum.photos/seed/product2/300/300.jpg" alt="Smart Watch" class="w-full h-48 object-cover">
+                        <div class="product-image-hover relative">
+                            <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&h=300&q=80" alt="Smartwatch" class="w-full h-48 object-cover">
+                            <span class="product-badge">-15%</span>
+                            <button class="wishlist-btn">
+                                <i class="far fa-heart"></i>
+                            </button>
                         </div>
                         <div class="p-4">
-                            <h3 class="font-semibold text-lg mb-2">Smart Watch Pro</h3>
-                            <div class="text-primary font-bold text-xl mb-2">$199.99</div>
+                            <h3 class="font-semibold text-lg mb-2">Smartwatch Pro</h3>
+                            <div class="flex items-center mb-3">
+                                <span class="product-original-price">$650.00</span>
+                                <span class="product-price">$555.00</span>
+                            </div>
                             <div class="flex items-center mb-3">
                                 <div class="star-rating">
                                     <i class="fas fa-star"></i>
@@ -255,21 +518,27 @@
                                 </div>
                                 <span class="text-gray text-sm ml-2">(42)</span>
                             </div>
-                            <a href="product-detail.html" class="block w-full bg-primary text-white text-center py-2 rounded hover:bg-blue-600 transition">
+                            <button class="w-full bg-primary text-white py-2 rounded hover:bg-blue-600 transition add-to-cart-btn" data-product="2">
                                 Add to Cart
-                            </a>
+                            </button>
                         </div>
                     </div>
 
                     <!-- Product 3 -->
                     <div class="card-hover bg-white rounded-lg shadow-md overflow-hidden">
                         <div class="product-image-hover relative">
-                            <img src="https://picsum.photos/seed/product3/300/300.jpg" alt="Laptop Bag" class="w-full h-48 object-cover">
-                            <span class="absolute top-2 right-2 bg-secondary text-white px-2 py-1 rounded text-sm font-semibold">New</span>
+                            <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&h=300&q=80" alt="Laptop" class="w-full h-48 object-cover">
+                            <span class="product-badge">-10%</span>
+                            <button class="wishlist-btn">
+                                <i class="far fa-heart"></i>
+                            </button>
                         </div>
                         <div class="p-4">
-                            <h3 class="font-semibold text-lg mb-2">Professional Laptop Bag</h3>
-                            <div class="text-primary font-bold text-xl mb-2">$49.99</div>
+                            <h3 class="font-semibold text-lg mb-2">UltraBook Pro</h3>
+                            <div class="flex items-center mb-3">
+                                <span class="product-original-price">$1,443.00</span>
+                                <span class="product-price">$1,299.00</span>
+                            </div>
                             <div class="flex items-center mb-3">
                                 <div class="star-rating">
                                     <i class="fas fa-star"></i>
@@ -280,20 +549,26 @@
                                 </div>
                                 <span class="text-gray text-sm ml-2">(18)</span>
                             </div>
-                            <a href="product-detail.html" class="block w-full bg-primary text-white text-center py-2 rounded hover:bg-blue-600 transition">
+                            <button class="w-full bg-primary text-white py-2 rounded hover:bg-blue-600 transition add-to-cart-btn" data-product="3">
                                 Add to Cart
-                            </a>
+                            </button>
                         </div>
                     </div>
 
                     <!-- Product 4 -->
                     <div class="card-hover bg-white rounded-lg shadow-md overflow-hidden">
-                        <div class="product-image-hover">
-                            <img src="https://picsum.photos/seed/product4/300/300.jpg" alt="Bluetooth Speaker" class="w-full h-48 object-cover">
+                        <div class="product-image-hover relative">
+                            <img src="https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&h=300&q=80" alt="Gaming Console" class="w-full h-48 object-cover">
+                            <span class="product-badge">New</span>
+                            <button class="wishlist-btn">
+                                <i class="far fa-heart"></i>
+                            </button>
                         </div>
                         <div class="p-4">
-                            <h3 class="font-semibold text-lg mb-2">Portable Bluetooth Speaker</h3>
-                            <div class="text-primary font-bold text-xl mb-2">$39.99</div>
+                            <h3 class="font-semibold text-lg mb-2">Gaming Console X</h3>
+                            <div class="flex items-center mb-3">
+                                <span class="product-price">$699.00</span>
+                            </div>
                             <div class="flex items-center mb-3">
                                 <div class="star-rating">
                                     <i class="fas fa-star"></i>
@@ -304,21 +579,27 @@
                                 </div>
                                 <span class="text-gray text-sm ml-2">(31)</span>
                             </div>
-                            <a href="product-detail.html" class="block w-full bg-primary text-white text-center py-2 rounded hover:bg-blue-600 transition">
+                            <button class="w-full bg-primary text-white py-2 rounded hover:bg-blue-600 transition add-to-cart-btn" data-product="4">
                                 Add to Cart
-                            </a>
+                            </button>
                         </div>
                     </div>
 
                     <!-- Product 5 -->
                     <div class="card-hover bg-white rounded-lg shadow-md overflow-hidden">
                         <div class="product-image-hover relative">
-                            <img src="https://picsum.photos/seed/product5/300/300.jpg" alt="Fitness Tracker" class="w-full h-48 object-cover">
-                            <span class="absolute top-2 right-2 bg-accent text-white px-2 py-1 rounded text-sm font-semibold">Sale</span>
+                            <img src="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&h=300&q=80" alt="Speakers" class="w-full h-48 object-cover">
+                            <span class="product-badge">-25%</span>
+                            <button class="wishlist-btn">
+                                <i class="far fa-heart"></i>
+                            </button>
                         </div>
                         <div class="p-4">
-                            <h3 class="font-semibold text-lg mb-2">Fitness Tracker Band</h3>
-                            <div class="text-primary font-bold text-xl mb-2">$59.99</div>
+                            <h3 class="font-semibold text-lg mb-2">Bluetooth Speakers</h3>
+                            <div class="flex items-center mb-3">
+                                <span class="product-original-price">$265.00</span>
+                                <span class="product-price">$199.00</span>
+                            </div>
                             <div class="flex items-center mb-3">
                                 <div class="star-rating">
                                     <i class="fas fa-star"></i>
@@ -329,20 +610,27 @@
                                 </div>
                                 <span class="text-gray text-sm ml-2">(27)</span>
                             </div>
-                            <a href="product-detail.html" class="block w-full bg-primary text-white text-center py-2 rounded hover:bg-blue-600 transition">
+                            <button class="w-full bg-primary text-white py-2 rounded hover:bg-blue-600 transition add-to-cart-btn" data-product="5">
                                 Add to Cart
-                            </a>
+                            </button>
                         </div>
                     </div>
 
                     <!-- Product 6 -->
                     <div class="card-hover bg-white rounded-lg shadow-md overflow-hidden">
-                        <div class="product-image-hover">
-                            <img src="https://picsum.photos/seed/product6/300/300.jpg" alt="Wireless Mouse" class="w-full h-48 object-cover">
+                        <div class="product-image-hover relative">
+                            <img src="https://images.unsplash.com/photo-1592478411213-6153e4ebc07d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&h=300&q=80" alt="VR Headset" class="w-full h-48 object-cover">
+                            <span class="product-badge">-30%</span>
+                            <button class="wishlist-btn">
+                                <i class="far fa-heart"></i>
+                            </button>
                         </div>
                         <div class="p-4">
-                            <h3 class="font-semibold text-lg mb-2">Ergonomic Wireless Mouse</h3>
-                            <div class="text-primary font-bold text-xl mb-2">$29.99</div>
+                            <h3 class="font-semibold text-lg mb-2">VR Headset Pro</h3>
+                            <div class="flex items-center mb-3">
+                                <span class="product-original-price">$1,142.00</span>
+                                <span class="product-price">$799.00</span>
+                            </div>
                             <div class="flex items-center mb-3">
                                 <div class="star-rating">
                                     <i class="fas fa-star"></i>
@@ -353,9 +641,71 @@
                                 </div>
                                 <span class="text-gray text-sm ml-2">(56)</span>
                             </div>
-                            <a href="product-detail.html" class="block w-full bg-primary text-white text-center py-2 rounded hover:bg-blue-600 transition">
+                            <button class="w-full bg-primary text-white py-2 rounded hover:bg-blue-600 transition add-to-cart-btn" data-product="6">
                                 Add to Cart
-                            </a>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Product 7 -->
+                    <div class="card-hover bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="product-image-hover relative">
+                            <img src="https://images.unsplash.com/photo-1588423771073-b8903fbb85b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&h=300&q=80" alt="Earbuds" class="w-full h-48 object-cover">
+                            <span class="product-badge">-20%</span>
+                            <button class="wishlist-btn">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-lg mb-2">Wireless Earbuds</h3>
+                            <div class="flex items-center mb-3">
+                                <span class="product-original-price">$199.00</span>
+                                <span class="product-price">$159.00</span>
+                            </div>
+                            <div class="flex items-center mb-3">
+                                <div class="star-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <span class="text-gray text-sm ml-2">(38)</span>
+                            </div>
+                            <button class="w-full bg-primary text-white py-2 rounded hover:bg-blue-600 transition add-to-cart-btn" data-product="7">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Product 8 -->
+                    <div class="card-hover bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="product-image-hover relative">
+                            <img src="https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&h=300&q=80" alt="Tablet" class="w-full h-48 object-cover">
+                            <span class="product-badge">-10%</span>
+                            <button class="wishlist-btn">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-lg mb-2">Pro Tablet</h3>
+                            <div class="flex items-center mb-3">
+                                <span class="product-original-price">$999.00</span>
+                                <span class="product-price">$899.00</span>
+                            </div>
+                            <div class="flex items-center mb-3">
+                                <div class="star-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                                <span class="text-gray text-sm ml-2">(22)</span>
+                            </div>
+                            <button class="w-full bg-primary text-white py-2 rounded hover:bg-blue-600 transition add-to-cart-btn" data-product="8">
+                                Add to Cart
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -368,89 +718,48 @@
             </div>
         </section>
 
-        <!-- Categories Section -->
-        <section class="py-16 lg:py-24 bg-light">
-            <div class="container mx-auto px-4">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl lg:text-4xl font-bold font-primary mb-4">Shop by Category</h2>
-                    <p class="text-gray text-lg max-w-2xl mx-auto">Browse our wide range of product categories</p>
-                </div>
-
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                    <div class="relative group cursor-pointer">
-                        <img src="https://picsum.photos/seed/electronics/200/200.jpg" alt="Electronics" class="w-full h-40 object-cover rounded-lg">
-                        <div class="absolute inset-0 bg-black bg-opacity-40 rounded-lg flex items-center justify-center group-hover:bg-opacity-50 transition">
-                            <h3 class="text-white font-semibold text-lg">Electronics</h3>
-                        </div>
-                    </div>
-                    <div class="relative group cursor-pointer">
-                        <img src="https://picsum.photos/seed/clothing/200/200.jpg" alt="Clothing" class="w-full h-40 object-cover rounded-lg">
-                        <div class="absolute inset-0 bg-black bg-opacity-40 rounded-lg flex items-center justify-center group-hover:bg-opacity-50 transition">
-                            <h3 class="text-white font-semibold text-lg">Clothing</h3>
-                        </div>
-                    </div>
-                    <div class="relative group cursor-pointer">
-                        <img src="https://picsum.photos/seed/home/200/200.jpg" alt="Home & Garden" class="w-full h-40 object-cover rounded-lg">
-                        <div class="absolute inset-0 bg-black bg-opacity-40 rounded-lg flex items-center justify-center group-hover:bg-opacity-50 transition">
-                            <h3 class="text-white font-semibold text-lg">Home & Garden</h3>
-                        </div>
-                    </div>
-                    <div class="relative group cursor-pointer">
-                        <img src="https://picsum.photos/seed/sports/200/200.jpg" alt="Sports" class="w-full h-40 object-cover rounded-lg">
-                        <div class="absolute inset-0 bg-black bg-opacity-40 rounded-lg flex items-center justify-center group-hover:bg-opacity-50 transition">
-                            <h3 class="text-white font-semibold text-lg">Sports</h3>
-                        </div>
-                    </div>
-                    <div class="relative group cursor-pointer">
-                        <img src="https://picsum.photos/seed/books/200/200.jpg" alt="Books" class="w-full h-40 object-cover rounded-lg">
-                        <div class="absolute inset-0 bg-black bg-opacity-40 rounded-lg flex items-center justify-center group-hover:bg-opacity-50 transition">
-                            <h3 class="text-white font-semibold text-lg">Books</h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Special Offers -->
+        <!-- Features Section -->
         <section class="py-16 lg:py-24">
             <div class="container mx-auto px-4">
                 <div class="text-center mb-12">
-                    <h2 class="text-3xl lg:text-4xl font-bold font-primary mb-4">Special Offers</h2>
-                    <p class="text-gray text-lg max-w-2xl mx-auto">Don't miss out on these amazing deals</p>
+                    <h2 class="text-3xl lg:text-4xl font-bold font-primary mb-4">Why Choose ELEKTROBUY</h2>
+                    <p class="text-gray text-lg max-w-2xl mx-auto">We offer the best shopping experience for all your electronic needs</p>
                 </div>
 
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="relative rounded-lg overflow-hidden group">
-                        <img src="https://picsum.photos/seed/offer1/600/300.jpg" alt="Flash Sale" class="w-full h-64 object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-r from-primary to-secondary bg-opacity-90 flex items-center justify-center">
-                            <div class="text-white text-center p-6">
-                                <span class="bg-accent text-white px-3 py-1 rounded text-sm font-semibold mb-3 inline-block">Limited Time</span>
-                                <h3 class="text-2xl font-bold mb-3">Flash Sale - Up to 70% Off</h3>
-                                <p class="mb-4">Get amazing discounts on selected electronics and gadgets</p>
-                                <a href="products.html" class="inline-block bg-white text-primary px-6 py-2 rounded-full font-semibold hover:bg-light transition">
-                                    Shop Now
-                                </a>
-                            </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-shipping-fast"></i>
                         </div>
+                        <h3 class="text-xl font-semibold mb-3">Free Shipping</h3>
+                        <p class="text-gray">Free shipping on all orders over $50</p>
                     </div>
-                    <div class="relative rounded-lg overflow-hidden group">
-                        <img src="https://picsum.photos/seed/offer2/600/300.jpg" alt="Bundle Deal" class="w-full h-64 object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-r from-secondary to-primary bg-opacity-90 flex items-center justify-center">
-                            <div class="text-white text-center p-6">
-                                <span class="bg-accent text-white px-3 py-1 rounded text-sm font-semibold mb-3 inline-block">Bundle Deal</span>
-                                <h3 class="text-2xl font-bold mb-3">Buy 2 Get 1 Free</h3>
-                                <p class="mb-4">Purchase any two items from our clothing collection</p>
-                                <a href="products.html" class="inline-block bg-white text-primary px-6 py-2 rounded-full font-semibold hover:bg-light transition">
-                                    Shop Now
-                                </a>
-                            </div>
+                    <div class="text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
                         </div>
+                        <h3 class="text-xl font-semibold mb-3">Secure Payment</h3>
+                        <p class="text-gray">100% secure payment process</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-undo"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">Easy Returns</h3>
+                        <p class="text-gray">30 days return policy</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">24/7 Support</h3>
+                        <p class="text-gray">Dedicated support team</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Testimonials -->
+        <!-- Testimonials Section -->
         <section class="py-16 lg:py-24 bg-light">
             <div class="container mx-auto px-4">
                 <div class="text-center mb-12">
@@ -459,9 +768,9 @@
                 </div>
 
                 <div class="grid md:grid-cols-3 gap-6">
-                    <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="testimonial-card">
                         <div class="flex items-center mb-4">
-                            <img src="https://picsum.photos/seed/customer1/60/60.jpg" alt="Sarah Johnson" class="w-12 h-12 rounded-full mr-4">
+                            <img src="https://images.unsplash.com/photo-1494790108755-2616b332c3ca?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=60&h=60&q=80" alt="Sarah Johnson" class="w-12 h-12 rounded-full mr-4">
                             <div>
                                 <h4 class="font-semibold">Sarah Johnson</h4>
                                 <p class="text-gray text-sm">Regular Customer</p>
@@ -474,11 +783,11 @@
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
                         </div>
-                        <p class="text-gray italic">"I've been shopping with ShopHub for over a year now and I'm always impressed with the quality of products and customer service. Highly recommended!"</p>
+                        <p class="text-gray italic">"I've been shopping with ELEKTROBUY for over a year now and I'm always impressed with the quality of products and customer service. Highly recommended!"</p>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="testimonial-card">
                         <div class="flex items-center mb-4">
-                            <img src="https://picsum.photos/seed/customer2/60/60.jpg" alt="Michael Chen" class="w-12 h-12 rounded-full mr-4">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=60&h=60&q=80" alt="Michael Chen" class="w-12 h-12 rounded-full mr-4">
                             <div>
                                 <h4 class="font-semibold">Michael Chen</h4>
                                 <p class="text-gray text-sm">First-time Buyer</p>
@@ -493,9 +802,9 @@
                         </div>
                         <p class="text-gray italic">"The website is so easy to navigate and the checkout process is seamless. I received my order in just 2 days. Will definitely shop again!"</p>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="testimonial-card">
                         <div class="flex items-center mb-4">
-                            <img src="https://picsum.photos/seed/customer3/60/60.jpg" alt="Emily Rodriguez" class="w-12 h-12 rounded-full mr-4">
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=60&h=60&q=80" alt="Emily Rodriguez" class="w-12 h-12 rounded-full mr-4">
                             <div>
                                 <h4 class="font-semibold">Emily Rodriguez</h4>
                                 <p class="text-gray text-sm">Loyal Customer</p>
@@ -508,22 +817,96 @@
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star-half-alt"></i>
                         </div>
-                        <p class="text-gray italic">"ShopHub has the best prices compared to other online stores. The quality is top-notch and their return policy is very customer-friendly."</p>
+                        <p class="text-gray italic">"ELEKTROBUY has the best prices compared to other online stores. The quality is top-notch and their return policy is very customer-friendly."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- News Section -->
+        <section class="py-16 lg:py-24">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl lg:text-4xl font-bold font-primary mb-4">Latest News</h2>
+                    <p class="text-gray text-lg max-w-2xl mx-auto">Stay updated with our latest news and offers</p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="card-hover bg-white rounded-lg shadow-md overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&h=250&q=80" alt="News 1" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <span class="text-primary text-sm font-semibold">July 15, 2023</span>
+                            <h3 class="font-semibold text-lg mt-2 mb-3">New Wireless Headphones Collection</h3>
+                            <p class="text-gray mb-4">Check out our latest collection of wireless headphones with advanced noise cancellation technology.</p>
+                            <a href="#" class="text-primary font-medium hover:underline">Read More</a>
+                        </div>
+                    </div>
+
+                    <div class="card-hover bg-white rounded-lg shadow-md overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1603796846097-bee99e4a601f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&h=250&q=80" alt="News 2" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <span class="text-primary text-sm font-semibold">July 10, 2023</span>
+                            <h3 class="font-semibold text-lg mt-2 mb-3">Summer Sale Up to 50% Off</h3>
+                            <p class="text-gray mb-4">Don't miss our summer sale with discounts up to 50% on selected electronics and gadgets.</p>
+                            <a href="#" class="text-primary font-medium hover:underline">Read More</a>
+                        </div>
+                    </div>
+
+                    <div class="card-hover bg-white rounded-lg shadow-md overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&h=250&q=80" alt="News 3" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <span class="text-primary text-sm font-semibold">July 5, 2023</span>
+                            <h3 class="font-semibold text-lg mt-2 mb-3">New Gaming Console Released</h3>
+                            <p class="text-gray mb-4">Experience next-gen gaming with our latest gaming console featuring 4K graphics and faster loading times.</p>
+                            <a href="#" class="text-primary font-medium hover:underline">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Brand Logos -->
+        <section class="py-16 lg:py-24 bg-light">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl lg:text-4xl font-bold font-primary mb-4">Featured Brands</h2>
+                    <p class="text-gray text-lg max-w-2xl mx-auto">Shop from your favorite brands</p>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
+                    <div class="flex items-center justify-center">
+                        <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=150&h=80&q=80" alt="Brand 1" class="brand-logo h-12 object-contain">
+                    </div>
+                    <div class="flex items-center justify-center">
+                        <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=150&h=80&q=80" alt="Brand 2" class="brand-logo h-12 object-contain">
+                    </div>
+                    <div class="flex items-center justify-center">
+                        <img src="https://images.unsplash.com/photo-1598928424272-9e663a7a7b32?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=150&h=80&q=80" alt="Brand 3" class="brand-logo h-12 object-contain">
+                    </div>
+                    <div class="flex items-center justify-center">
+                        <img src="https://images.unsplash.com/photo-1598928424272-9e663a7a7b32?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=150&h=80&q=80" alt="Brand 4" class="brand-logo h-12 object-contain">
+                    </div>
+                    <div class="flex items-center justify-center">
+                        <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=150&h=80&q=80" alt="Brand 5" class="brand-logo h-12 object-contain">
+                    </div>
+                    <div class="flex items-center justify-center">
+                        <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=150&h=80&q=80" alt="Brand 6" class="brand-logo h-12 object-contain">
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Newsletter -->
-        <section class="py-16 lg:py-24">
+        <section class="py-16 lg:py-24 newsletter-bg">
             <div class="container mx-auto px-4">
-                <div class="bg-gradient-to-r from-primary to-secondary rounded-2xl p-8 lg:p-12 text-center text-white">
+                <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-8 lg:p-12 text-center text-white">
                     <h2 class="text-3xl lg:text-4xl font-bold font-primary mb-4">Subscribe to Our Newsletter</h2>
                     <p class="text-lg mb-8 opacity-90">Get the latest updates on new products and exclusive offers</p>
-                    <form class="max-w-md mx-auto flex flex-col sm:flex-row gap-4">
-                        <input type="email" placeholder="Enter your email address" class="flex-1 px-4 py-3 rounded-full text-dark outline-none" required>
-                        <button type="submit" class="bg-accent hover:bg-orange-600 px-8 py-3 rounded-full font-semibold transition">
-                            Subscribe
+                    <form id="newsletter-form" class="max-w-md mx-auto flex flex-col sm:flex-row gap-4">
+                        <input type="email" id="newsletter-email" placeholder="Enter your email address" class="flex-1 px-4 py-3 rounded-full text-dark outline-none" required>
+                        <button type="submit" class="bg-accent hover:bg-red-600 px-8 py-3 rounded-full font-semibold transition flex items-center justify-center">
+                            <span id="subscribe-text">Subscribe</span>
+                            <div id="subscribe-spinner" class="loading-spinner hidden"></div>
                         </button>
                     </form>
                 </div>
@@ -536,8 +919,8 @@
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
                 <div>
-                    <h3 class="text-xl font-bold font-primary mb-4">About ShopHub</h3>
-                    <p class="text-gray mb-4">ShopHub is your one-stop online store for quality products at affordable prices.</p>
+                    <h3 class="text-xl font-bold font-primary mb-4">About ELEKTROBUY</h3>
+                    <p class="text-gray mb-4">ELEKTROBUY is your one-stop online store for quality electronics at affordable prices.</p>
                     <div class="flex gap-4">
                         <a href="#" class="text-gray hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" class="text-gray hover:text-white transition"><i class="fab fa-twitter"></i></a>
@@ -570,13 +953,13 @@
                     <ul class="space-y-2 text-gray">
                         <li><i class="fas fa-map-marker-alt mr-2"></i> 123 Main Street, New York, NY 10001</li>
                         <li><i class="fas fa-phone mr-2"></i> +1 (123) 456-7890</li>
-                        <li><i class="fas fa-envelope mr-2"></i> info@shophub.com</li>
+                        <li><i class="fas fa-envelope mr-2"></i> info@elektrobuy.com</li>
                         <li><i class="fas fa-clock mr-2"></i> Mon-Fri: 9am-6pm EST</li>
                     </ul>
                 </div>
             </div>
             <div class="border-t border-gray pt-8 text-center text-gray">
-                <p>&copy; 2023 ShopHub. All rights reserved.</p>
+                <p>&copy; 2023 ELEKTROBUY. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -586,50 +969,146 @@
         const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
         const mobileMenu = document.getElementById('mobile-menu');
         const mobileMenuClose = document.getElementById('mobile-menu-close');
+        const backdrop = document.getElementById('backdrop');
 
         mobileMenuToggle.addEventListener('click', () => {
             mobileMenu.classList.add('active');
+            backdrop.classList.add('active');
         });
 
         mobileMenuClose.addEventListener('click', () => {
             mobileMenu.classList.remove('active');
+            backdrop.classList.remove('active');
         });
 
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!mobileMenu.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
-                mobileMenu.classList.remove('active');
+        // Cart sidebar toggle
+        const cartToggle = document.getElementById('cart-toggle');
+        const cartSidebar = document.getElementById('cart-sidebar');
+        const cartClose = document.getElementById('cart-close');
+
+        cartToggle.addEventListener('click', () => {
+            cartSidebar.classList.add('active');
+            backdrop.classList.add('active');
+        });
+
+        cartClose.addEventListener('click', () => {
+            cartSidebar.classList.remove('active');
+            backdrop.classList.remove('active');
+        });
+
+        // Close mobile menu, cart when clicking on backdrop
+        backdrop.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+            cartSidebar.classList.remove('active');
+            backdrop.classList.remove('active');
+        });
+
+        // Search autocomplete
+        const searchInput = document.getElementById('search-input');
+        const searchAutocomplete = document.getElementById('search-autocomplete');
+        const searchBtn = document.getElementById('search-btn');
+
+        searchInput.addEventListener('input', () => {
+            const query = searchInput.value.trim();
+            if (query.length > 0) {
+                // Simulate search results
+                searchAutocomplete.innerHTML = `
+                    <div class="p-2">
+                        <a href="#" class="block px-4 py-2 hover:bg-light transition">Wireless Headphones</a>
+                        <a href="#" class="block px-4 py-2 hover:bg-light transition">Smart Watch Pro</a>
+                        <a href="#" class="block px-4 py-2 hover:bg-light transition">Gaming Console</a>
+                        <a href="#" class="block px-4 py-2 hover:bg-light transition">Bluetooth Speakers</a>
+                    </div>
+                `;
+                searchAutocomplete.classList.remove('hidden');
+            } else {
+                searchAutocomplete.classList.add('hidden');
             }
         });
 
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
+        // Hide search autocomplete when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!searchInput.contains(e.target) && !searchAutocomplete.contains(e.target)) {
+                searchAutocomplete.classList.add('hidden');
+            }
+        });
+
+        // Wishlist toggle
+        const wishlistBtns = document.querySelectorAll('.wishlist-btn');
+        const wishlistToggle = document.getElementById('wishlist-toggle');
+        const wishlistCount = wishlistToggle.querySelector('span');
+
+        wishlistBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.classList.toggle('active');
+                const icon = btn.querySelector('i');
+                if (btn.classList.contains('active')) {
+                    icon.classList.remove('far');
+                    icon.classList.add('fas');
+                    // Update wishlist count
+                    const count = parseInt(wishlistCount.textContent);
+                    wishlistCount.textContent = count + 1;
+                } else {
+                    icon.classList.remove('fas');
+                    icon.classList.add('far');
+                    // Update wishlist count
+                    const count = parseInt(wishlistCount.textContent);
+                    wishlistCount.textContent = count - 1;
                 }
             });
         });
 
-        // Add animation on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+        // Add to cart
+        const addToCartBtns = document.querySelectorAll('.add-to-cart-btn');
+        const cartCount = cartToggle.querySelector('span');
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-fade-in');
-                }
+        addToCartBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Show loading state
+                const originalText = btn.textContent;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                btn.disabled = true;
+                
+                // Simulate adding to cart
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.disabled = false;
+                    
+                    // Update cart count
+                    const count = parseInt(cartCount.textContent);
+                    cartCount.textContent = count + 1;
+                    
+                    // Show cart sidebar
+                    cartSidebar.classList.add('active');
+                    backdrop.classList.add('active');
+                }, 1000);
             });
-        }, observerOptions);
-
-        document.querySelectorAll('.card-hover').forEach(el => {
-            observer.observe(el);
         });
-    </script>
-</body>
-</html>
+
+        // Back to top button
+        const backToTop = document.getElementById('back-to-top');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Newsletter form
+        const newsletterForm = document.getElementById('newsletter-form');
+        const newsletterEmail = document.getElementById('newsletter-email');
+        const subscribeText = document.getElementById('subscribe-text');
+        const subscribeSpinner = document.getElementById('subscribe-spinner');
+        const newsletterFeedback = document.getElementById('newsletter-feedback');
+        const closeFeedback = document.getElementById('close-feedback');
+
+        newsletterForm.addEventListener('submit', (e) => {
